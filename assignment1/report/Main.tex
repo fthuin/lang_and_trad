@@ -11,20 +11,26 @@
 
 \begin{document}
     \maketitle
-    \section{Division operator}
+    
+    \section{Implementation}
+
+	During this assignment, we modified the j-- grammar by adding three operators
+	to the existing grammar.  
+    
+    \subsection{Division operator (/)}
     We followed step-by-step the first chapter of the book to implement the
     \textbf{division} operator. It helped us to understand where was each part
     of the compiler in the code and to have a look at what was already done and
     where we would have to add functionalities.
 
-    \section{Modulo operator}
+    \subsection{Modulo operator (\%)}
     The modulo operator is very similar to the division operator, such that
     each modification we made was nearly the same as what we did in the first
     part of this assignment. As it accepts the same limits (in terms of typing
     for example) as division, the idea behind the test was similar (only works
     on integer and sends back the rest of the division).
 
-    \section{Substraction assignment operator}
+    \subsection{Substraction assignment operator (-=)}
     The substraction assignment operator was different from the two first
     operators because it is an \textbf{assignment} and not an operator. So we
     had to look at the \verb#JAssignment.java# file and verify what was already
@@ -32,12 +38,27 @@
     between those two operators is that the substraction doesn't work on
     \verb#String#. The tests made are verifying that it only works on \verb#int#
     and that it returns the expected result.
-
-    \section{A \texttt{j--} program: GCD}
-    We implemented the gcd function using the substraction assignment operator
-    previously described:
+    
+    \section{Testing}
+    
+    Before implementing each of our new operator, we wrote various tests that would 
+    confirm whether our implementation worked or not. In the pass tests we tested various
+    regular and edge cases to guarantee that the operator worked as intended provided that it
+    received correct data. While in the fail tests incorrect cases such as the 
+    division/modulo by 0 or other incorrect uses of the operators such as 
+    effecting a subtraction assignment with an int in place of a variable. \newline
+    
+    The final build proved all those tests successful, allowing us 
+    to guarantee the correctness of our final implementation.
+    
+    \section{Programming}
+    
+    Finally, we implemented the gcd function in j--, using the previously described 
+    substraction assignment operator :
+    
     \lstinputlisting[language=Java, frame=single]{gcd.java}
-    The tests were made to ensure that it returns the expected result for
+    
+    The tests were made as to ensure that it returned the expected result for
     limit cases (one parameter being 0, one parameter being 1, the two
     parameters not having a gcd greater than 1, the two parameters having
     a gcd greater than 1).
