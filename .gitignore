@@ -17,5 +17,7 @@ hs_err_pid*
 *.fls
 *.log
 *.pdf
+*.out
+*.toc
 
 *.synctex.gz
