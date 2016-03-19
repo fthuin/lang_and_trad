@@ -7,6 +7,7 @@
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{amsmath}
 
 \graphicspath{{img/}}
 
@@ -14,12 +15,20 @@
 \date{\today}
 \title{Assignment 2 : Deeper understanding of j-- compiler}
 
+%NOTE, EN CAS DE BESOIN :
+%First Set => https://www.youtube.com/watch?v=lqTwUxJ18d4
+%Follow Set => https://www.youtube.com/watch?v=BuFhsJn3KPY
+%Parsing Table => https://www.youtube.com/watch?v=HpmB3Wd8pxI
+
 \begin{document}
+
     \maketitle
     \tableofcontents
-    \section{Lexical analysis}
-    \section{Parsing}
-    \section{DFA}
+    \section{Theoretic exercices}
+    \subsection{Lexical analysis}
+    \subsection{Parsing}
+    \subsection{DFA}
+    
     	Yes, it is possible to accept an infinite language, for example
     	((1)* 0) accept an infinite sequence of bit but can be 
     	represented by the following DFA :
@@ -29,7 +38,8 @@
     		\includegraphics[scale=0.5]{DFAQ3.png}
     	\end{figure}
     	
-    \section{Language}
+    \subsection{Language}
+    
     	The language of balanced parenthesis is not regular. 
     	To demonstrate it, let us consider a simplified version of the language 
     	where we consider only a sequence of k left parenthesis followed by
@@ -51,5 +61,25 @@
     	Thus, this sequence will never be part of our simplified language L, and since
     	this subset of the original language cannot be represent by a regular expression,
     	we can infer that the whole language similarly cannot be represented.
+    	
+    \section{Recursive descent}
+    \subsection{Changes to the grammar}
+    
+    	The current grammar is by no means LL(1) as it is subject to both direct and
+    	indirect recursion. The grammar must thus be changed as follow to become LL(1) :
+    	\newline
+    	
+    	% En cas de besoin : http://smlweb.cpsc.ucalgary.ca/start.html
+    	\begin{flushleft}
+    	E -> T $E_1$ \\
+    	$E_1$ -> and T $E_1$ | nand T $E_1$ | $\epsilon$ \\
+    	T -> F $T_1$ \\
+		T1 -> or F $T_1$ | nor F $T_1$ | epsilon \\
+		F -> ( E ) | !F | id \\
+		id -> true | false \\
+		\end{flushleft}
+
+    	This new grammar created using the rules specified in the slides describes
+    	the same language but allows a LL parser to be made.
 
 \end{document}
