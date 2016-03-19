@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{placeins}
+\usepackage{qtree}
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage{amsmath}
@@ -348,7 +349,7 @@
     \bigskip
 
 	To build the table, we must then identify the first and follow set of our axioms.
-	Thus obtaining the two following set :
+	Thus obtaining the two following set :  \newline
 
     \begin{minipage}{\linewidth}
 	\begin{minipage}[t]{0.50\linewidth}
@@ -375,6 +376,7 @@
 			\item first(P1) = \{ ) \}
 			\item first(D) = \{ $\rightarrow$; ) \}
 		\end{itemize}
+	\end{minipage}
 	\end{minipage} \newline
 
 	Which allow us to build the following LL(1) parsing table :
@@ -382,18 +384,49 @@
 	\begin{center}
   		\begin{tabular}{ | c || c | c | c | c | c | c | c | c | c | c |}
     		\hline
-    		& & backward & forward & right & left & $\rightarrow$ & id & ) & , & move( 
+    		& & move( & , & ) & id & $\rightarrow$ & left & right & forward & backward 
     		\\ \hline
-    		Y 	& & & & & & & & & & 1\\ \hline
-    		Y1 	& & & & & & & & 2 & 3 &  \\ \hline
-    		X 	& & & & & & & 4 & & &  \\ \hline
-    		P 	& & 5 & 5 & 5 & 5 & & & & &  \\ \hline
-    		P1 	& & & & & & 6 & & 7 & &  \\ \hline
-    		D 	& & 11 & 10 & 9 & 8 & & & & &  \\ \hline
+    		Y 	& & 1 & & & & & & & & \\ \hline
+    		Y1 	& & & 3 & 2 & & & & & &  \\ \hline
+    		X 	& & & & & 4 & & & & &  \\ \hline
+    		P 	& & & & & & & 5 & 5 & 5 & 5  \\ \hline
+    		P1 	& & & & 7 & & 6 & & & &  \\ \hline
+    		D 	& & & & & & & 8 & 9 & 10 & 11  \\ \hline
   		\end{tabular}
-		\end{center}
-    \end{minipage}
+	\end{center} 
+    
+    Parsing move( id, left $\rightarrow$ right) would result in the following steps : 
+    \newline
+    
+    %TODO make them be side by side
+    \begin{minipage}{\linewidth}
+		\begin{minipage}[t]{0.45\linewidth}
+		\begin{enumerate}
+ 	   		\item Y
+    		\item move( X Y1
+    		\item move( id Y1
+    		\item move( id , P )
+    		\item move( id , D P1 )
+    	\end{enumerate}
+    	\end{minipage} 
+    	
+    	\begin{minipage}[t]{0.05\linewidth}
+        	\vrule{}
+    	\end{minipage}
+    
+    	\begin{minipage}[t]{0.45\linewidth}
+    	\begin{enumerate}
+    		\setcounter{enumi}{5}
+    		\item move( id , left P1 )
+    		\item move( id , left $\rightarrow$ D P1)
+    		\item move( id , left $\rightarrow$ right P1)
+    		\item move( id , left $\rightarrow$ right $\epsilon$)
+    		\item move( id , left $\rightarrow$ right )
+    	\end{enumerate}
+    	\end{minipage}
+    \end{minipage} 
 
+ 
     \subsection{DFA}
 
     	Yes, it is possible to accept an infinite language, for example
