@@ -9,9 +9,10 @@
 \usepackage{amsmath}
 \usepackage{tikz}
 \usepackage{multicol}
-\usetikzlibrary{automata,arrows,positioning}
+\usetikzlibrary{automata,arrows,positioning,shapes}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
 \graphicspath{{img/}}
 
@@ -28,6 +29,7 @@
 
     \maketitle
     \tableofcontents
+    \clearpage{}
 
 	\section{Theoretic exercices}
     \subsection{Lexical analysis}
@@ -82,58 +84,78 @@
 
     \subsection{NFA to DFA step-by-step}
 
+    \begin{figure}[!ht]
+    \begin{minipage}{\linewidth}
+        \begin{minipage}[t]{0.45\linewidth}
+
     First we regroup all the states reachable from the initial only by using
     $\epsilon$-closure (i.e.\ reachable only with $\epsilon$-transitions).
 
-    \begin{figure}[!ht]
         \begin{center}
         \begin{tikzpicture}
-            \node[state, initial, initial text={}] (0) {$0,1,2,3,5,7,8,11$};
+            \begin{scriptsize}
+            \node[state, initial, initial text={}] (0) {\begin{tabular}{l}$0,1,2,3,5,$\\$7,8,11$\end{tabular}};
+        \end{scriptsize}
         \end{tikzpicture}
         \caption{NFA to DFA\@: Initial state}
         \end{center}
-    \end{figure}
-    \FloatBarrier
+
+        \end{minipage}
+        \begin{minipage}[t]{0.08\linewidth}
+            \vrule{}
+        \end{minipage}
+        \begin{minipage}[t]{0.45\linewidth}
 
     Then, we add which states are reachable from this initial state with an
     $a$-transition (including $\epsilon$-transition):
 
-    \begin{figure}[!ht]
         \begin{center}
         \begin{tikzpicture}[node distance=3cm, on grid, auto]
-            \node[state, initial, initial text={}] (0) {$0,1,2,3,5,7,8,11$};
+            \begin{scriptsize}
+            \node[state, initial, initial text={}] (0) {\begin{tabular}{l}$0,1,2,3,5,$\\$7,8,11$\end{tabular}};
             \node[state, right of = 0] (1) {$4,5,9$};
             \path[->, line width=2pt] (0) edge node {$a$} (1);
+        \end{scriptsize}
         \end{tikzpicture}
         \caption{NFA to DFA\@: Initial state and an $a$-transition}
         \end{center}
-    \end{figure}
     \FloatBarrier
 
-    Then, we add which states are reachable from those states with a
-    $b$-transition:
+        \end{minipage}
+    \end{minipage}
+    \end{figure}
+    \FloatBarrier{}
+
 
     \begin{figure}[!ht]
+    \begin{minipage}[t]{\linewidth}
+    \begin{minipage}[t]{0.45\linewidth}
+        Then, we add which states are reachable from those states with a
+        $b$-transition:
         \begin{center}
-        \begin{tikzpicture}[node distance=3cm, on grid, auto]
-            \node[state, initial, initial text={}] (0) {$0,1,2,3,5,7,8,11$};
+        \begin{tikzpicture}[node distance=2.5cm, on grid, auto]
+            \begin{scriptsize}
+            \node[state, initial, initial text={}] (0) {\begin{tabular}{l}$0,1,2,3,5,$\\$7,8,11$\end{tabular}};
             \node[state, right of = 0] (1) {$3,4,5,9$};
             \node[state, below of = 0] (2) {$6,7$};
             \node[state, below of = 1] (3) {$6,7,8,10,11$};
             \path[->, line width=2pt] (0) edge node {$a$} (1);
             \path[->, line width=2pt] (0) edge node {$b$} (2);
             \path[->, line width=2pt] (1) edge node {$b$} (3);
+        \end{scriptsize}
         \end{tikzpicture}
         \caption{NFA to DFA\@: Initial state and an $a$-transition and a $b$-transition}
         \end{center}
-    \end{figure}
-    \FloatBarrier
-
+    \end{minipage}
+    \begin{minipage}[t]{0.05\linewidth}
+        \vrule{}
+    \end{minipage}
+    \begin{minipage}[t]{0.45\linewidth}
     Then, we add which states are reachable from those states with an $a$-transition:
-    \begin{figure}[!ht]
         \begin{center}
         \begin{tikzpicture}[node distance=3cm, on grid, auto]
-            \node[state, initial, initial text={}] (0) {$0,1,2,3,5,7,8,11$};
+            \begin{scriptsize}
+            \node[state, initial, initial text={}] (0) {\begin{tabular}{l}$0,1,2,3,5,$\\$7,8,11$\end{tabular}};
             \node[state, right of = 0] (1) {$3,4,5,9$};
             \node[state, below of = 0] (2) {$6,7$};
             \node[state, below of = 1] (3) {$6,7,8,10,11$};
@@ -144,18 +166,22 @@
             \path[->, line width=2pt] (1) edge node {$b$} (3);
             \path[->, line width=2pt] (1) edge node {$a$} (4);
             \path[->, line width=2pt] (3) edge node {$a$} (5);
+        \end{scriptsize}
         \end{tikzpicture}
         \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
         \end{center}
+    \end{minipage}
+    \end{minipage}
     \end{figure}
-    \FloatBarrier
+    \FloatBarrier{}
 
     We skip some steps by adding the remaining $a$- and $b$-transitions.
 
     \begin{figure}[!ht]
         \begin{center}
         \begin{tikzpicture}[node distance=3cm, on grid, auto]
-            \node[state, initial, initial text={}] (0) {$0,1,2,3,5,7,8,11$};
+            \begin{scriptsize}
+            \node[state, initial, initial text={}] (0) {\begin{tabular}{l}$0,1,2,3,5,$\\$7,8,11$\end{tabular}};
             \node[state, right of = 0] (1) {$3,4,5,9$};
             \node[state, below of = 0] (2) {$6,7$};
             \node[state, right of = 1] (3) {$6,7,8,10,11$};
@@ -171,18 +197,20 @@
             \path[->, line width=2pt] (4) edge node {$b$} (2);
             \path[->, line width=2pt] (5) edge [bend left] node {$b$} (7);
             \path[->, line width=2pt] (7) edge [bend left] node {$a$}(5);
+        \end{scriptsize}
         \end{tikzpicture}
         \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
         \end{center}
     \end{figure}
-    \FloatBarrier
+    \FloatBarrier{}
 
     We add the $c$-transitions:
 
     \begin{figure}[!ht]
         \begin{center}
-        \begin{tikzpicture}[node distance=3cm, on grid, auto]
-            \node[state, initial, initial text={}] (0) {$0,1,2,3,5,7,8,11$};
+        \begin{tikzpicture}[node distance=2cm, on grid, auto]
+            \begin{scriptsize}
+            \node[state, initial, initial text={}] (0) {\begin{tabular}{l}$0,1,2,3,5,$\\$7,8,11$\end{tabular}};
             \node[state, right of = 0] (1) {$3,4,5,9$};
             \node[state, below of = 0] (2) {$6,7$};
             \node[state, right of = 1] (3) {$6,7,8,10,11$};
@@ -199,12 +227,76 @@
             \path[->, line width=2pt] (3) edge [bend left] node {$a$} (5);
             \path[->, line width=2pt] (4) edge [loop below] node {$a$} (4);
             \path[->, line width=2pt] (4) edge node {$b$} (2);
-            \path[->, line width=2pt] (0) edge [bend right] node {$c$} (6);
+            \path[->, line width=2pt] (0) edge [bend right, left] node {$c$} (6);
             \path[->, line width=2pt] (2) edge node {$c$} (6);
             \path[->, line width=2pt] (3) edge [bend left=45] node {$c$} (6);
             \path[->, line width=2pt] (7) edge [bend left] node {$c$} (6);
+        \end{scriptsize}
         \end{tikzpicture}
         \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
+        \end{center}
+    \end{figure}
+    \FloatBarrier{}
+
+    We rename the sets of states to number to be more readable:
+
+    \begin{figure}[!ht]
+        \begin{center}
+        \begin{tikzpicture}[node distance=2cm, on grid, auto]
+            \begin{scriptsize}
+            \node[state, initial, initial text={}] (0) {$0$};
+            \node[state, right of = 0] (1) {$1$};
+            \node[state, below of = 0] (2) {$2$};
+            \node[state, right of = 1] (3) {$3$};
+            \node[state, below of = 1] (4) {$4$};
+            \node[state, right of = 3] (5) {$5$};
+            \node[accepting, state, below of = 2] (6) {$6$};
+            \node[state, below of = 5] (7) {$7$};
+            \path[->, line width=2pt] (5) edge [bend left] node {$b$} (7);
+            \path[->, line width=2pt] (7) edge [bend left] node {$a$}(5);
+            \path[->, line width=2pt] (0) edge node {$a$} (1);
+            \path[->, line width=2pt] (0) edge node {$b$} (2);
+            \path[->, line width=2pt] (1) edge node {$b$} (3);
+            \path[->, line width=2pt] (1) edge node {$a$} (4);
+            \path[->, line width=2pt] (3) edge [bend left] node {$a$} (5);
+            \path[->, line width=2pt] (4) edge [loop below] node {$a$} (4);
+            \path[->, line width=2pt] (4) edge node {$b$} (2);
+            \path[->, line width=2pt] (0) edge [bend right, left] node {$c$} (6);
+            \path[->, line width=2pt] (2) edge node {$c$} (6);
+            \path[->, line width=2pt] (3) edge [bend left=45] node {$c$} (6);
+            \path[->, line width=2pt] (7) edge [bend left] node {$c$} (6);
+            \end{scriptsize}
+        \end{tikzpicture}
+        \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
+        \end{center}
+    \end{figure}
+    \FloatBarrier
+
+    Here is the minimized DFA:
+
+    \begin{figure}[!ht]
+        \begin{center}
+        \begin{tikzpicture}[node distance=2cm, on grid, auto]
+            \node[state, initial, initial text={}] (0) {$0$};
+            \node[state, right of = 0] (1) {$1$};
+            \node[state, below of = 0] (2) {$2$};
+            \node[state, right of = 1] (3) {$3,7$};
+            \node[state, below of = 1] (4) {$4$};
+            \node[state, right of = 3] (5) {$5$};
+            \node[accepting, state, below of = 2] (6) {$6$};
+            \path[->, line width=2pt] (5) edge [bend left] node {$b$} (3);
+            \path[->, line width=2pt] (0) edge node {$a$} (1);
+            \path[->, line width=2pt] (0) edge node {$b$} (2);
+            \path[->, line width=2pt] (1) edge node {$b$} (3);
+            \path[->, line width=2pt] (1) edge node {$a$} (4);
+            \path[->, line width=2pt] (3) edge [bend left] node {$a$} (5);
+            \path[->, line width=2pt] (4) edge [loop below] node {$a$} (4);
+            \path[->, line width=2pt] (4) edge node {$b$} (2);
+            \path[->, line width=2pt] (0) edge [bend right, left] node {$c$} (6);
+            \path[->, line width=2pt] (2) edge node {$c$} (6);
+            \path[->, line width=2pt] (3) edge [bend left=45] node {$c$} (6);
+        \end{tikzpicture}
+        \caption{Minimized DFA}
         \end{center}
     \end{figure}
     \FloatBarrier
