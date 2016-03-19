@@ -347,6 +347,22 @@
 		\end{itemize}
 	\end{minipage}
 	
+	Which allow us to build the following LL(1) parsing table :
+	
+	\begin{center}
+  		\begin{tabular}{ | c || c | c | c | c | c | c | c | c | c | c |}
+    		\hline
+    		& & backward & forward & right & left & $\rightarrow$ & id & ) & , & move( 
+    		\\ \hline
+    		Y 	& & & & & & & & & & 1\\ \hline
+    		Y1 	& & & & & & & & 2 & 3 &  \\ \hline
+    		X 	& & & & & & & 4 & & &  \\ \hline
+    		P 	& & 5 & 5 & 5 & 5 & & & & &  \\ \hline
+    		P1 	& & & & & & 6 & & 7 & &  \\ \hline
+    		D 	& & 11 & 10 & 9 & 8 & & & & &  \\ \hline
+  		\end{tabular}
+		\end{center}
+	
     \subsection{DFA}
 
     	Yes, it is possible to accept an infinite language, for example
