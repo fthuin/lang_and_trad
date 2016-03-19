@@ -8,6 +8,7 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{tikz}
+\usepackage{multicol}
 \usetikzlibrary{automata,arrows,positioning}
 \usepackage{graphicx}
 \usepackage{amsmath}
@@ -209,17 +210,70 @@
     \FloatBarrier
 
     \subsection{Parsing}
+    
+	This grammar is not LL(1) as it is left recursive and as it has a first set conflict.
+	An equivalent LL(1) grammar would be :
+	
+	\begin{flushleft}
+	1)	Y ::= move(X Y1 \\
+	2)	Y1 ::= ) \\
+	3)	Y1 ::= ,P) \\
+	4)	X ::= id \\
+	5)	P ::= D P1 \\
+	6)	P1 ::= $\rightarrow$ D P1 \\
+	7)	P1 ::= $\epsilon$\\
+	8)	D ::= left   \\
+	9)	D ::= right   \\
+	10)	D ::= forward   \\
+	11)	D ::= backward  \\
+	\end{flushleft}
+	
+	To build the table, we must then identify the first and follow set of our axioms.
+	Thus obtaining the two following set :
+
+	\begin{minipage}{0.45\linewidth}
+		First set :
+		\begin{itemize}
+			\item first(Y) = \{ move( \}
+			\item first(Y1) = \{ ); virgule \}
+			\item first(X) = \{ id \}
+			\item first(P) = \{ left; right; forward; backward \}
+			\item first(P1) = \{ $\rightarrow$ \}
+			\item first(D) = \{ left; right; forward; backward \}
+		\end{itemize}
+	\end{minipage}
+	
+	\begin{minipage}{0.45\linewidth}
+		Follow set :
+		\begin{itemize}
+			\item first(Y) = \{ $\emptyset$ \}
+			\item first(Y1) = \{  $\emptyset$ \}
+			\item first(X) = \{ ); virgule \}
+			\item first(P) = \{ ) \}
+			\item first(P1) = \{ ) \}
+			\item first(D) = \{ $\rightarrow$; ) \}
+		\end{itemize}
+	\end{minipage}
+	
     \subsection{DFA}
 
     	Yes, it is possible to accept an infinite language, for example
     	((1)* 0) accept an infinite sequence of bit but can be
     	represented by the following DFA :
+        
+        \begin{figure}[!ht]
+    	\begin{center}
+    		\begin{tikzpicture}[node distance=2cm, on grid, auto]
+                \node[state, initial, initial text={}] (0) {$0$};
+                \node[state, accepting, right of = 0] (1) {$1$};
 
-    	\begin{figure}[!h]
-    		\center
-    		\includegraphics[scale=0.5]{DFAQ3.png}
-    	\end{figure}
-        \FloatBarrier
+                \path[->, line width=2pt] (0) edge [loop above] node {$1$} (0);
+                \path[->, line width=2pt] (0) edge node {$0$} (1);
+            \end{tikzpicture}
+    	\caption{DFA accepting an infinite language}
+    	\end{center}
+    \end{figure}
+    \FloatBarrier
 
     \subsection{Language}
 
