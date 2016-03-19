@@ -6,15 +6,42 @@
 \usepackage{placeins}
 \usepackage{csquotes}
 \usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{automata,arrows,positioning}
 
 \author{Florian Thuin \and Cyril de Vogelaere}
 \date{\today}
-\title{Assignment 2 : Deeper understanding of j-- compiler}
+\title{Assignment 2: Deeper understanding of j-- compiler}
 
 \begin{document}
     \maketitle
     \tableofcontents
     \section{Lexical analysis}
+    Here is a regExp:
+    $$ ((a^{*}b) \mid (ab)^{*})c $$
+
+    With this regExp, we can define an infinite number of sequences:
+
+    $$ \{ \epsilon, c, bc, abc, aabc, ababc, \ldots \} $$
+
+    \subsection{NFA with Thompson construction}
+
+    \begin{figure}[!ht]
+    	\begin{center}
+    		\begin{tikzpicture}[node distance=3cm, on grid, auto]
+                \node[state, initial, initial text={}] (0) {$0$};
+                \node[state] (1)  [above right =of 0] {$S_a$};
+                \node        (Na) [right of = 1] {${N}_{a}$};
+                \node[state] (2)  [right of = Na] {$E_{a}$};
+                \node[state] (3)  [below right =of 0] {$3$};
+
+                \path[->] (0) edge[bend left]   node [above] {$\epsilon$} (1);
+                \path[->] (0) edge[bend right]  node [below] {$\epsilon$} (3);
+            \end{tikzpicture}
+    	\caption{State diagram}
+    	\end{center}
+    \end{figure}
     \section{Parsing}
     \section{DFA}
     \section{Language}
