@@ -10,6 +10,7 @@
 \usepackage{tikz}
 \usetikzlibrary{automata,arrows,positioning}
 \usepackage{graphicx}
+\usepackage{amsmath}
 
 \graphicspath{{img/}}
 
@@ -17,10 +18,18 @@
 \date{\today}
 \title{Assignment 2: Deeper understanding of j-- compiler}
 
+%NOTE, EN CAS DE BESOIN :
+%First Set => https://www.youtube.com/watch?v=lqTwUxJ18d4
+%Follow Set => https://www.youtube.com/watch?v=BuFhsJn3KPY
+%Parsing Table => https://www.youtube.com/watch?v=HpmB3Wd8pxI
+
 \begin{document}
+
     \maketitle
     \tableofcontents
-    \section{Lexical analysis}
+
+	\section{Theoretic exercices}
+    \subsection{Lexical analysis}
     Here is a regExp:
     $$ ((a^{*}b) \mid {(ab)}^{*})c $$
 
@@ -28,7 +37,7 @@
 
     $$ \{ \epsilon, c, bc, abc, aabc, ababc, \ldots \} $$
 
-    \subsection{NFA with Thompson construction}
+    \subsubsection{NFA with Thompson construction}
 
     \begin{figure}[!ht]
     	\begin{center}
@@ -68,6 +77,7 @@
     	\caption{NFA of $(({a}^{*}b)|{(ab)}^{*})c$}
     	\end{center}
     \end{figure}
+    \FloatBarrier
 
     \subsection{NFA to DFA step-by-step}
 
@@ -82,6 +92,7 @@
         \caption{NFA to DFA\@: Initial state}
         \end{center}
     \end{figure}
+    \FloatBarrier
 
     Then, we add which states are reachable from this initial state with an
     $a$-transition (including $\epsilon$-transition):
@@ -96,6 +107,7 @@
         \caption{NFA to DFA\@: Initial state and an $a$-transition}
         \end{center}
     \end{figure}
+    \FloatBarrier
 
     Then, we add which states are reachable from those states with a
     $b$-transition:
@@ -114,6 +126,7 @@
         \caption{NFA to DFA\@: Initial state and an $a$-transition and a $b$-transition}
         \end{center}
     \end{figure}
+    \FloatBarrier
 
     Then, we add which states are reachable from those states with an $a$-transition:
     \begin{figure}[!ht]
@@ -134,6 +147,7 @@
         \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
         \end{center}
     \end{figure}
+    \FloatBarrier
 
     We skip some steps by adding the remaining $a$- and $b$-transitions.
 
@@ -160,6 +174,7 @@
         \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
         \end{center}
     \end{figure}
+    \FloatBarrier
 
     We add the $c$-transitions:
 
@@ -182,7 +197,6 @@
             \path[->, line width=2pt] (1) edge node {$a$} (4);
             \path[->, line width=2pt] (3) edge [bend left] node {$a$} (5);
             \path[->, line width=2pt] (4) edge [loop below] node {$a$} (4);
-            %\path[->, line width=2pt] (5) edge [bend left] node {$b$} (3);
             \path[->, line width=2pt] (4) edge node {$b$} (2);
             \path[->, line width=2pt] (0) edge [bend right] node {$c$} (6);
             \path[->, line width=2pt] (2) edge node {$c$} (6);
@@ -192,10 +206,11 @@
         \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
         \end{center}
     \end{figure}
+    \FloatBarrier
 
+    \subsection{Parsing}
+    \subsection{DFA}
 
-    \section{Parsing}
-    \section{DFA}
     	Yes, it is possible to accept an infinite language, for example
     	((1)* 0) accept an infinite sequence of bit but can be
     	represented by the following DFA :
@@ -204,8 +219,10 @@
     		\center
     		\includegraphics[scale=0.5]{DFAQ3.png}
     	\end{figure}
+        \FloatBarrier
 
-    \section{Language}
+    \subsection{Language}
+
     	The language of balanced parenthesis is not regular.
     	To demonstrate it, let us consider a simplified version of the language
     	where we consider only a sequence of k left parenthesis followed by
@@ -227,5 +244,25 @@
     	Thus, this sequence will never be part of our simplified language L, and since
     	this subset of the original language cannot be represent by a regular expression,
     	we can infer that the whole language similarly cannot be represented.
+
+    \section{Recursive descent}
+    \subsection{Changes to the grammar}
+
+    	The current grammar is by no means LL(1) as it is subject to both direct and
+    	indirect recursion. The grammar must thus be changed as follow to become LL(1) :
+    	\newline
+
+    	% En cas de besoin : http://smlweb.cpsc.ucalgary.ca/start.html
+    	\begin{flushleft}
+    	E -> T $E_1$ \\
+    	$E_1$ -> and T $E_1$ | nand T $E_1$ | $\epsilon$ \\
+    	T -> F $T_1$ \\
+		T1 -> or F $T_1$ | nor F $T_1$ | epsilon \\
+		F -> ( E ) | !F | id \\
+		id -> true | false \\
+		\end{flushleft}
+
+    	This new grammar created using the rules specified in the slides describes
+    	the same language but allows a LL parser to be made.
 
 \end{document}
