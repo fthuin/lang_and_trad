@@ -175,9 +175,12 @@
     \end{figure}
     \FloatBarrier{}
 
-    We skip some steps by adding the remaining $a$- and $b$-transitions.
-
     \begin{figure}[!ht]
+    \begin{minipage}{\linewidth}
+    \begin{minipage}{0.2\linewidth}
+    We skip some steps by adding the remaining $a$- and $b$-transitions:
+    \end{minipage}
+    \begin{minipage}{0.75\linewidth}
         \begin{center}
         \begin{tikzpicture}[node distance=3cm, on grid, auto]
             \begin{scriptsize}
@@ -201,12 +204,17 @@
         \end{tikzpicture}
         \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
         \end{center}
+    \end{minipage}
+    \end{minipage}
     \end{figure}
     \FloatBarrier{}
 
-    We add the $c$-transitions:
-
     \begin{figure}[!ht]
+    \begin{minipage}{\linewidth}
+    \begin{minipage}{0.3\linewidth}
+    We add the $c$-transitions:
+    \end{minipage}
+    \begin{minipage}{0.65\linewidth}
         \begin{center}
         \begin{tikzpicture}[node distance=2cm, on grid, auto]
             \begin{scriptsize}
@@ -235,12 +243,17 @@
         \end{tikzpicture}
         \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
         \end{center}
+    \end{minipage}
+    \end{minipage}
     \end{figure}
     \FloatBarrier{}
 
-    We rename the sets of states to number to be more readable:
-
     \begin{figure}[!ht]
+    \begin{minipage}{\linewidth}
+    \begin{minipage}{0.3\linewidth}
+    We rename the sets of states to number to be more readable:
+    \end{minipage}
+    \begin{minipage}{0.65\linewidth}
         \begin{center}
         \begin{tikzpicture}[node distance=2cm, on grid, auto]
             \begin{scriptsize}
@@ -269,12 +282,17 @@
         \end{tikzpicture}
         \caption{NFA to DFA\@: Initial state and two $a$-transitions and a $b$-transition}
         \end{center}
+    \end{minipage}
+    \end{minipage}
     \end{figure}
-    \FloatBarrier
-
-    Here is the minimized DFA:
+    \FloatBarrier{}
 
     \begin{figure}[!ht]
+    \begin{minipage}{\linewidth}
+    \begin{minipage}{0.3\linewidth}
+    Here is the minimized DFA\@:
+    \end{minipage}
+    \begin{minipage}{0.65\linewidth}
         \begin{center}
         \begin{tikzpicture}[node distance=2cm, on grid, auto]
             \node[state, initial, initial text={}] (0) {$0$};
@@ -298,32 +316,42 @@
         \end{tikzpicture}
         \caption{Minimized DFA}
         \end{center}
+    \end{minipage}
+    \end{minipage}
     \end{figure}
-    \FloatBarrier
+    \FloatBarrier{}
 
     \subsection{Parsing}
-    
+
 	This grammar is not LL(1) as it is left recursive and as it has a first set conflict.
-	An equivalent LL(1) grammar would be :
-	
-	\begin{flushleft}
-	1)	Y ::= move(X Y1 \\
-	2)	Y1 ::= ) \\
-	3)	Y1 ::= ,P) \\
-	4)	X ::= id \\
-	5)	P ::= D P1 \\
-	6)	P1 ::= $\rightarrow$ D P1 \\
-	7)	P1 ::= $\epsilon$\\
-	8)	D ::= left   \\
-	9)	D ::= right   \\
-	10)	D ::= forward   \\
-	11)	D ::= backward  \\
-	\end{flushleft}
-	
+	An equivalent LL(1) grammar would be: \newline
+
+    \begin{minipage}{\linewidth}
+        \begin{enumerate}
+        \begin{minipage}{0.45\linewidth}
+	           \item Y ::= move(X Y1
+               \item Y1 ::= )
+               \item Y1 ::= ,P)
+               \item X ::= id
+               \item P ::= D P1
+               \item P1 ::= $\rightarrow$ D P1
+        \end{minipage}
+        \begin{minipage}{0.45\linewidth}
+            \item P1 ::= $\epsilon$
+            \item D ::= left
+	        \item D ::= right
+            \item D ::= forward
+            \item D ::= backward
+        \end{minipage}
+        \end{enumerate}
+    \end{minipage}
+    \bigskip
+
 	To build the table, we must then identify the first and follow set of our axioms.
 	Thus obtaining the two following set :
 
-	\begin{minipage}{0.45\linewidth}
+    \begin{minipage}{\linewidth}
+	\begin{minipage}[t]{0.50\linewidth}
 		First set :
 		\begin{itemize}
 			\item first(Y) = \{ move( \}
@@ -334,8 +362,10 @@
 			\item first(D) = \{ left; right; forward; backward \}
 		\end{itemize}
 	\end{minipage}
-	
-	\begin{minipage}{0.45\linewidth}
+    \begin{minipage}[t]{0.05\linewidth}
+        \vrule{}
+    \end{minipage}
+	\begin{minipage}[t]{0.40\linewidth}
 		Follow set :
 		\begin{itemize}
 			\item first(Y) = \{ $\emptyset$ \}
@@ -345,8 +375,8 @@
 			\item first(P1) = \{ ) \}
 			\item first(D) = \{ $\rightarrow$; ) \}
 		\end{itemize}
-	\end{minipage}
-	
+	\end{minipage} \newline
+
 	Which allow us to build the following LL(1) parsing table :
 	
 	\begin{center}
@@ -362,13 +392,14 @@
     		D 	& & 11 & 10 & 9 & 8 & & & & &  \\ \hline
   		\end{tabular}
 		\end{center}
-	
+    \end{minipage}
+
     \subsection{DFA}
 
     	Yes, it is possible to accept an infinite language, for example
     	((1)* 0) accept an infinite sequence of bit but can be
     	represented by the following DFA :
-        
+
         \begin{figure}[!ht]
     	\begin{center}
     		\begin{tikzpicture}[node distance=2cm, on grid, auto]
