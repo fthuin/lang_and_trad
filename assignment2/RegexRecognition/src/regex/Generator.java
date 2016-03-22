@@ -19,7 +19,7 @@ public class Generator {
 	
 	public Generator(int seed) {
 		this.seed = seed;
-		rand = new Random(seed);
+		rand = new Random(this.seed);
 	}
 	
 	
