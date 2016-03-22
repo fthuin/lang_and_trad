@@ -19,7 +19,7 @@
 
 \author{Florian Thuin \and Cyril de Vogelaere}
 \date{\today}
-\title{Assignment 2: Deeper understanding of j-- compiler}
+\title{Assignment 2: Theoretic exercises}
 
 %NOTE, EN CAS DE BESOIN :
 %First Set => https://www.youtube.com/watch?v=lqTwUxJ18d4
@@ -380,11 +380,11 @@
 	\end{minipage} \newline
 
 	Which allow us to build the following LL(1) parsing table :
-	
+
 	\begin{center}
   		\begin{tabular}{ | c || c | c | c | c | c | c | c | c | c | c |}
     		\hline
-    		& & move( & , & ) & id & $\rightarrow$ & left & right & forward & backward 
+    		& & move( & , & ) & id & $\rightarrow$ & left & right & forward & backward
     		\\ \hline
     		Y 	& & 1 & & & & & & & & \\ \hline
     		Y1 	& & & 3 & 2 & & & & & &  \\ \hline
@@ -393,12 +393,11 @@
     		P1 	& & & & 7 & & 6 & & & &  \\ \hline
     		D 	& & & & & & & 8 & 9 & 10 & 11  \\ \hline
   		\end{tabular}
-	\end{center} 
-    
-    Parsing move( id, left $\rightarrow$ right) would result in the following steps : 
+	\end{center}
+
+    Parsing move( id, left $\rightarrow$ right) would result in the following steps :
     \newline
-    
-    %TODO make them be side by side
+
     \begin{minipage}{\linewidth}
 		\begin{minipage}[t]{0.45\linewidth}
 		\begin{enumerate}
@@ -408,12 +407,10 @@
     		\item move( id , P )
     		\item move( id , D P1 )
     	\end{enumerate}
-    	\end{minipage} 
-    	
+    	\end{minipage}
     	\begin{minipage}[t]{0.05\linewidth}
         	\vrule{}
     	\end{minipage}
-    
     	\begin{minipage}[t]{0.45\linewidth}
     	\begin{enumerate}
     		\setcounter{enumi}{5}
@@ -424,9 +421,9 @@
     		\item move( id , left $\rightarrow$ right )
     	\end{enumerate}
     	\end{minipage}
-    \end{minipage} 
+    \end{minipage}
 
- 
+
     \subsection{DFA}
 
     	Yes, it is possible to accept an infinite language, for example
@@ -470,25 +467,5 @@
     	Thus, this sequence will never be part of our simplified language L, and since
     	this subset of the original language cannot be represent by a regular expression,
     	we can infer that the whole language similarly cannot be represented.
-
-    \section{Recursive descent}
-    \subsection{Changes to the grammar}
-
-    	The current grammar is by no means LL(1) as it is subject to both direct and
-    	indirect recursion. The grammar must thus be changed as follow to become LL(1) :
-    	\newline
-
-    	% En cas de besoin : http://smlweb.cpsc.ucalgary.ca/start.html
-    	\begin{flushleft}
-    	E -> T $E_1$ \\
-    	$E_1$ -> and T $E_1$ | nand T $E_1$ | $\epsilon$ \\
-    	T -> F $T_1$ \\
-		T1 -> or F $T_1$ | nor F $T_1$ | epsilon \\
-		F -> ( E ) | !F | id \\
-		id -> true | false \\
-		\end{flushleft}
-
-    	This new grammar created using the rules specified in the slides describes
-    	the same language but allows a LL parser to be made.
 
 \end{document}
