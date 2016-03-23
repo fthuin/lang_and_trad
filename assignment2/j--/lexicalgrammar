@@ -7,6 +7,11 @@
 // Single line comment -- ignored
 "//" {~("\n"|"\r")} ("\n"|"\r"["\n"])
 
+// Multi lines comment
+SKIP: {"/": COMMENTS }
+<COMMENTS> SKIP : {"*/": DEFAULT}
+<COMMENTS> SKIP { < ~[] > }
+
 // Reserved words
 ABSTRACT    ::= "abstract"
 BOOLEAN     ::= "boolean"

@@ -632,7 +632,8 @@ public class Parser {
      * <pre>
      *   statement ::= block
      *               | IF parExpression statement [ELSE statement]
-     *               | WHILE parExpression statement 
+     *               | WHILE parExpression statement
+     *               | FOR forExpression statement 
      *               | RETURN [expression] SEMI
      *               | SEMI 
      *               | statementExpression SEMI
@@ -664,11 +665,111 @@ public class Parser {
             }
         } else if (have(SEMI)) {
             return new JEmptyStatement(line);
+        } else if (have(FOR)) {
+        	mustBe(LPAREN);
+        	if (seeForeach()) {
+        		return foreachStatement(line);
+        	} else {
+        		return forStatement(line);
+        	}
         } else { // Must be a statementExpression
             JStatement statement = statementExpression();
             mustBe(SEMI);
             return statement;
         }
+    }
+    
+    /**
+     * Parse a for-each loop of type for ( ... : ...) after
+     * the first parenthesis
+     * @param line : the line to parse
+     * @return a JForeachStatement made with the parsed line
+     */
+    private JForeachStatement foreachStatement(int line) {
+    	JFormalParameter formalParam = formalParameter();
+    	mustBe(COLON);
+    	JExpression expr = expression();
+    	mustBe(RPAREN);
+    	JStatement stat = statement();
+    	return new JForeachStatement(line, formalParam, expr, stat);
+    }
+    
+    /**
+     * Parse a for loop of type for (... ; ... ; ...) after the
+     * left parenthesis
+     * @param line : the line to parse
+     * @return a JForeachStatement made with the parsed line
+     */
+    private JForStatement forStatement(int line) {
+    	/* Between the left parenthesis and the first semicolon */
+    	ArrayList<JStatement> initStatements = null;
+    	if (! see(SEMI)) {
+    		initStatements = statementList();
+    	}
+    	//else if (see(FINAL) || seeLocalVariableDeclaration()) {
+    	else if (seeLocalVariableDeclaration()) {
+    		ArrayList<String> modifiers = null;
+    		/*if (have(FINAL)) {
+    			modifiers = new ArrayList<String>();
+    			modifiers.add("final");
+    		}*/
+    		ArrayList<JVariableDeclarator> varDeclarator = variableDeclarators(type());
+    		JVariableDeclaration varDeclaration = new JVariableDeclaration(line, modifiers, varDeclarator);
+    		initStatements.add(varDeclaration);
+    	}
+    	
+    	mustBe(SEMI);
+    	
+    	/* Between the two semi-colons */
+    	
+    	JExpression expr = null;
+    	
+    	if (! see(SEMI)) {
+    		expr = expression();
+    	}
+    	
+    	mustBe(SEMI);
+    	
+    	/* Between the second semi-colon and the right parenthesis */
+    	
+    	ArrayList<JStatement> endStatements = null;
+    	
+    	if (! see(RPAREN)) {
+    		endStatements = statementList();
+    	}
+    	
+    	mustBe(RPAREN);
+    	
+    	/* Body of the for-loop */
+    	JStatement bodyStatement = statement();
+    	
+    	return new JForStatement(line, initStatements, expr, endStatements, bodyStatement);
+    }
+    
+    private ArrayList<JStatement> statementList() {
+        ArrayList<JStatement> statList = new ArrayList<JStatement>();
+        statList.add(statementExpression());
+        while (have(COMMA)) {
+        	statList.add(statementExpression());
+        }
+        return statList;
+    }
+    
+    /**
+     * Are we looking at a for-each loop ? ie.
+     * 
+     * <pre>
+     * 	LPAREN type IDENTIFIER : identifier RPAREN
+     * </pre>
+     * 
+     * @return true iff we're looking at a for-each loop
+     */
+    
+    private boolean seeForeach() {
+    	scanner.recordPosition();
+    	boolean result = seeLocalVariableDeclaration() && see(COLON); // or have(COLON) ?
+    	scanner.returnToPosition();
+    	return result;
     }
 
     /**

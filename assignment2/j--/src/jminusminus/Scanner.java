@@ -105,6 +105,19 @@ class Scanner {
                     while (ch != '\n' && ch != EOFCH) {
                         nextCh();
                     }
+                } else if (ch == '*') {
+                	nextCh();
+                	boolean mustNotStop = true;
+                	while (ch != EOFCH && mustNotStop) {
+                		if (ch == '*') {
+                			nextCh();
+                			if (ch == '/') mustNotStop = false;
+                		}
+                		else {
+                			nextCh();
+                		}
+                	}
+                	if (ch != EOFCH) nextCh();
                 } else {
                     reportScannerError("Operator / is not supported in j--.");
                 }
