@@ -698,10 +698,9 @@ private JStatement statement(): {
         		expr = expression()
         		<RPAREN>
         		body = statement()
-        		{ statement = new JForeachStatement(line, foreachParam, expr, body); }
-        	|
+        		{ statement = new JForeachStatement(line, foreachParam, expr, body); }        	|
         	// Check normal for-loop of type for( ... ; ... ; ...)
-        	LOOKAHEAD(variableDeclarators(type()) <SEMI>)
+        	LOOKAHEAD(type() variableDeclarator())
         		[initDeclarators = variableDeclarators(type()) ]
         		<SEMI>
         		[expr = expression()]
@@ -728,6 +727,35 @@ private JStatement statement(): {
     }
     { return statement; }
 }
+
+/**
+ * Parse iteration statements.
+ * 
+ * <pre>
+ *   iterationStatements ::= JStatement (COMMA JStatement)* 
+ * </pre>
+ * 
+ * @return a list of statements separated by comma(s).
+ */
+ 
+private ArrayList<JStatement> iterationStatements(): {
+	int line = token.beginLine;
+	ArrayList<JStatement> result = new ArraList<JStatement>();
+	JStatement current = null;
+}
+{
+	try {
+		current = statementExpression()
+		{ result.add(current); }
+		(
+			<COMMA> current = statementExpression()
+			{ result.add(current); }
+		)*
+	} catch ( ParseException e) {
+		recoverFromError( new int[] {SEMI , EOF}, e);
+	}
+	{ return result; }
+} 
 
 /**
  * Parse formal parameters.

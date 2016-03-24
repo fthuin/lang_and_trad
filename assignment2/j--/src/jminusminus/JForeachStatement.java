@@ -8,9 +8,8 @@ public class JForeachStatement extends JStatement {
 
     private JFormalParameter forParam;
     private JExpression expression;
-    private JStatement statement;
+    private JStatement body;
 
-    // no need to copy-paste the code from JForStatement => we can use it...
     private JForStatement forStatement;
 
     /**
@@ -28,85 +27,64 @@ public class JForeachStatement extends JStatement {
      */
     protected JForeachStatement(int line, JFormalParameter forParam,
                                     JExpression expression,
-                                    JStatement statement) {
+                                    JStatement body) {
         super(line);
         this.forParam = forParam;
         this.expression = expression;
-        this.statement = statement;
+        this.body = body;
 
-        /* hidden to the user: the condition of the real loop,
-         * the initial statement (with a new variable),
-         * the statement used at the end of the loop to increment the new variable
+        /**
+         * DECLARATION PART OF A STANDARD FOR-LOOP
          */
+
+        ArrayList<JVariableDeclarator> initDeclarators = new ArrayList<JVariableDeclarator>(); // init the tmp variable and the param
+
+        /* Temporarly creating a variable to iterate */
+        JVariable iteratorVariable = new JVariable(line, "__iteratorVariable__" + line);
+        JLiteralInt zeroLiteralInt = new JLiteralInt(line, "0");
+        JVariableDeclarator initVariableDeclarator = new JVariableDeclarator(line, iteratorVariable.name(), Type.INT, zeroLiteralInt);
+        initDeclarators.add(initVariableDeclarator);
+
+        /* Part between the left parenthesis and the colon */
+        JVariable iterationVariable = new JVariable(line, forParam.name()); // we need a JExpression for JVariableDeclarator
+        JVariableDeclarator foreachVarDecl = new JVariableDeclarator(line, iterationVariable.name(), forParam.type(), iterationVariable);
+        initDeclarators.add(foreachVarDecl);
+
+        /**
+         * CONDITION PART OF A STANDARD FOR-LOOP
+         */
+
         JExpression condition;
-        ArrayList<JStatement> forInit; // init the tmp variable and the param
-        ArrayList<JStatement> forIncrement; // increment and assign
-
-        // init all parts
-        ArrayList<JVariableDeclarator> vars =
-                new ArrayList<JVariableDeclarator>();
-        forInit = new ArrayList<JStatement>();
-        forIncrement = new ArrayList<JStatement>();
-
-        // we need a temporary variable (which will be incremented)
-        JVariable tmpIncVariable = new JVariable(line, "__tmp__" + line);
-        JLiteralInt zero = new JLiteralInt(line, "0");
-        JVariableDeclarator tmpIncVarDecl = new JVariableDeclarator(
-                line,
-                tmpIncVariable.name(),
-                Type.INT,
-                zero);
-        vars.add(tmpIncVarDecl);
-
-        // the variable which will contain the statement
-        JVariable foreachVar = new JVariable(line, forParam.name());
-        JVariableDeclarator foreachVarDecl = new JVariableDeclarator(
-                line,
-                foreachVar.name(),
-                forParam.type(),
-                foreachVar);
-        vars.add(foreachVarDecl);
-
-        // forInit => like the one in the Parser
-        ArrayList<String> mods = new ArrayList<String>();
-        JVariableDeclaration forInitVarDecl = new JVariableDeclaration(line,
-                mods, vars);
-        forInit.add(forInitVarDecl);
-
-
-        /* the condition: 'tmpIncVariable < array.length' but...
-         * '<' is not available, only '>' or '<=' are available... => ! a == b
-         */
         // Get the length:
-        JFieldSelection length = new JFieldSelection(line,
-                expression, "length");
-        // ==
-        JEqualOp equalOp = new JEqualOp(line, tmpIncVariable, length);
-        // ! ==
-        JExpression lhs = new JLogicalNotOp(line, equalOp);
-
-        // if the condition is true: assign the right value to foreachVar
-        JArrayExpression array = new JArrayExpression(line, expression,
-                tmpIncVariable);
-        JAssignOp assignment = new JAssignOp(line, foreachVar, array);
-        /* little hack to add this new assignment just after this condition
-         * and still used the 'classical' for loop :-)
-         */
-        JExpression rhs = new JEqualOp(line, assignment, assignment);
+        JFieldSelection length = new JFieldSelection(line, expression, "length");
+        // iteratorVariable <= length
+        JLessEqualOp lhs = new JLessEqualOp(line, iteratorVariable, length);
+        // iteratorVariable == length
+        JEqualOp equalOp = new JEqualOp(line, iteratorVariable, length);
+        // ! iteratorVariable == length
+        JExpression rhs = new JLogicalNotOp(line, equalOp);
+        // iteratorVariable <= length ^ ! iteratorVariable == length
         condition = new JLogicalAndOp(line, lhs, rhs);
 
+        /**
+         * ITERATION PART OF A STANDARD FOR-LOOP
+         */
+
+        ArrayList<JStatement> endStatements = new ArrayList<JStatement>();
+        // retrieve data in an array (expression) at position iteratorVariable
+        JArrayExpression valueInArray = new JArrayExpression(line, expression, iteratorVariable);
+        // assign value retrieved in the array
+        JAssignOp assignment = new JAssignOp(line, iterationVariable, valueInArray); 
+        endStatements.add(assignment);
 
         // now the third part of the for loop: incrementing + assignment
         // incrementing part
-        JPreIncrementOp incr = new JPreIncrementOp(line, tmpIncVariable);
-        forIncrement.add(incr);
-
-        // assign from the array at the index 'tmpIncVariable'
-        forIncrement.add(assignment);
+        JPreIncrementOp incrementOp = new JPreIncrementOp(line, iteratorVariable);
+        endStatements.add(incrementOp);
 
         // easier to directly use the code from the JForStatement...
-        forStatement = new JForStatement(line, forInit, condition,
-                forIncrement, statement);
+        forStatement = new JForStatement(line, initDeclarators, condition,
+                endStatements, body);
     }
 
     /**
@@ -117,39 +95,6 @@ public class JForeachStatement extends JStatement {
      * @return the analyzed (and possibly rewritten) AST subtree.
      */
     public JAST analyze(Context context) {
-        /*
-        // expression
-        if (expression != null) {
-            expression.analyze(context);
-        }
-        // forParam
-        if (forParam != null) {
-            forParam.analyze(context);
-        }
-        // hidden statements
-        if (forInit != null) {
-            for (JStatement init : forInit) {
-                init.analyze(context);
-            }
-        }
-
-        // condition: a boolean (only one)
-        if (condition != null) {
-            condition.analyze(context);
-            condition.type().mustMatchExpected(line(), Type.BOOLEAN);
-        }
-
-        // incr
-        if (forIncr != null) {
-            for (JStatement incr : forIncr) {
-                incr.analyze(context);
-            }
-        }
-        // the body
-        statement.analyze(context);
-        */
-
-        // idem, we can also use it to analyse
         forStatement.analyze(context);
         return this;
     }
@@ -163,7 +108,7 @@ public class JForeachStatement extends JStatement {
      * a writeToStdOut like the other
      */
     public void writeToStdOut(PrettyPrinter p) {
-        p.printf("<JForStatement line=\"%d\">\n", line());
+        p.printf("<JForeachStatement line=\"%d\">\n", line());
         p.indentRight();
             p.println("<FormalParam>");
             p.indentRight();
@@ -179,11 +124,11 @@ public class JForeachStatement extends JStatement {
             p.println("</Expression>");
             p.println("<Statement>");
             p.indentRight();
-                statement.writeToStdOut(p);
+                body.writeToStdOut(p);
             p.indentLeft();
             p.println("</Statement>");
         p.indentLeft();
-        p.println("</JForStatement>");
+        p.println("</JForeachStatement>");
     }
 
 }

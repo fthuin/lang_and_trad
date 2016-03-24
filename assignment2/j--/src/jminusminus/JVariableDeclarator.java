@@ -29,7 +29,7 @@ class JVariableDeclarator extends JAST {
      * @param name
      *            variable name.
      * @param type
-     *            variable type.
+     *            variable type. 
      * @param initializer
      *            initializer.
      */
