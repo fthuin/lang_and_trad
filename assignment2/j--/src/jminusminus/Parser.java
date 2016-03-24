@@ -690,8 +690,8 @@ public class Parser {
     	mustBe(COLON);
     	JExpression expr = expression();
     	mustBe(RPAREN);
-    	JStatement stat = statement();
-    	return new JForeachStatement(line, formalParam, expr, stat);
+    	JStatement bodyStatement = statement();
+    	return new JForeachStatement(line, formalParam, expr, bodyStatement);
     }
     
     /**
@@ -702,20 +702,9 @@ public class Parser {
      */
     private JForStatement forStatement(int line) {
     	/* Between the left parenthesis and the first semicolon */
-    	ArrayList<JStatement> initStatements = null;
+    	ArrayList<JVariableDeclarator> initStatements = null;
     	if (! see(SEMI)) {
-    		initStatements = statementList();
-    	}
-    	//else if (see(FINAL) || seeLocalVariableDeclaration()) {
-    	else if (seeLocalVariableDeclaration()) {
-    		ArrayList<String> modifiers = null;
-    		/*if (have(FINAL)) {
-    			modifiers = new ArrayList<String>();
-    			modifiers.add("final");
-    		}*/
-    		ArrayList<JVariableDeclarator> varDeclarator = variableDeclarators(type());
-    		JVariableDeclaration varDeclaration = new JVariableDeclaration(line, modifiers, varDeclarator);
-    		initStatements.add(varDeclaration);
+    		initStatements = variableDeclarators(type());
     	}
     	
     	mustBe(SEMI);

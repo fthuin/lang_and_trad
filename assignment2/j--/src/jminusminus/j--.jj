@@ -206,6 +206,7 @@ TOKEN:
 | < SEMI: ";" >
 | < COMMA: "," >
 | < DOT: "." >
+| < COLON: ":" >
 }
 
 // Identifiers
@@ -644,7 +645,9 @@ private JStatement blockStatement(): {
  * <pre>
  *   statement ::= block
  *               | IF parExpression statement [ELSE statement]
- *               | WHILE parExpression statement 
+ *               | WHILE parExpression statemen
+				 | FOR(formalParameter() : expression()])
+				 | FOR([variableDeclarators()] ; [expression()] ; [iterationStatements()])
  *               | RETURN [expression] SEMI
  *               | SEMI 
  *               | statementExpression SEMI
@@ -661,6 +664,9 @@ private JStatement statement(): {
     JStatement alternate = null;
     JStatement body = null;
     JExpression expr = null;
+    JFormalParameter foreachParam = null;
+    ArrayList<JVariableDeclarator> initDeclarators = null;
+    ArrayList<JStatement> iterationStatementsList = null;
 }
 {       
     try {
@@ -683,6 +689,28 @@ private JStatement statement(): {
         test = parExpression() 
         body = statement()
         { statement = new JWhileStatement( line, test, body ); } |
+        <FOR> { line = token.beginLine; } <LPAREN>
+        (
+        	// Check foreach
+        	LOOKAHEAD(formalParameter() <COLON>)
+        		foreachParam = formalParameter()
+        		<COLON>
+        		expr = expression()
+        		<RPAREN>
+        		body = statement()
+        		{ statement = new JForeachStatement(line, foreachParam, expr, body); }
+        	|
+        	// Check normal for-loop of type for( ... ; ... ; ...)
+        	LOOKAHEAD(variableDeclarators(type()) <SEMI>)
+        		[initDeclarators = variableDeclarators(type()) ]
+        		<SEMI>
+        		[expr = expression()]
+        		<SEMI>
+        		[iterationStatementsList = iterationStatements()]
+        		<RPAREN>
+        		body = statement()
+        		{ statement = new JForStatement(line, initDeclarators, expr, iterationStatementsList, body); }
+        ) |
         <RETURN> { line = token.beginLine; }
         [ 
             expr = expression() 

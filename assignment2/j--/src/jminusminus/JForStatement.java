@@ -9,7 +9,7 @@ public class JForStatement extends JStatement{
     /* ArrayList of all the statements between the right parenthesis and the
      * first semi-colon.
      */
-    private ArrayList<JStatement> initStatements;
+    private ArrayList<JVariableDeclarator> initStatements;
     /* Expression between the two semi-colons */
     private JExpression condition;
     /* ArrayList of all the statement between the last semi-colon and the
@@ -31,7 +31,7 @@ public class JForStatement extends JStatement{
      */
 
     public JForStatement(int line,
-                         ArrayList<JStatement> initStatements,
+                         ArrayList<JVariableDeclarator> initStatements,
                          JExpression condition,
                          ArrayList<JStatement> endStatements,
                          JStatement bodyStatement) {
@@ -53,7 +53,7 @@ public class JForStatement extends JStatement{
     public JAST analyze(Context context) {
         /* Analyzation of the statement(s) */
         if (initStatements != null) {
-            for (JStatement initStatement : initStatements) {
+            for (JVariableDeclarator initStatement : initStatements) {
                 initStatement.analyze(context);
             }
         }
@@ -90,7 +90,7 @@ public class JForStatement extends JStatement{
          *
          */
         if (initStatements != null) {
-            for (JStatement initStatement : initStatements)
+            for (JVariableDeclarator initStatement : initStatements)
                 initStatement.codegen(output);
         }
 
@@ -133,7 +133,7 @@ public class JForStatement extends JStatement{
         p.println("<Init>");
         p.indentRight();
         if (initStatements != null) {
-                    for (JStatement initStatement : initStatements) {
+                    for (JVariableDeclarator initStatement : initStatements) {
                         initStatement.writeToStdOut(p);
                     }
                 }
