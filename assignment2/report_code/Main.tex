@@ -1,0 +1,55 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{placeins}
+\usepackage{qtree}
+\usepackage{csquotes}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{multicol}
+\usetikzlibrary{automata,arrows,positioning,shapes}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+\graphicspath{{img/}}
+
+\author{Florian Thuin \and Cyril de Vogelaere}
+\date{\today}
+\title{Assignment 2: Deeper understanding of j-- compiler}
+
+%NOTE, EN CAS DE BESOIN :
+%First Set => https://www.youtube.com/watch?v=lqTwUxJ18d4
+%Follow Set => https://www.youtube.com/watch?v=BuFhsJn3KPY
+%Parsing Table => https://www.youtube.com/watch?v=HpmB3Wd8pxI
+
+\begin{document}
+
+    \maketitle
+    \tableofcontents
+    \clearpage{}
+
+    \section{Recursive descent}
+    \subsection{Changes to the grammar}
+
+    	The current grammar is by no means $LL(1)$ as it is subject to both direct and
+    	indirect recursion. The grammar must thus be changed as follow to become $LL(1)$:
+    	\newline
+
+    	% En cas de besoin : http://smlweb.cpsc.ucalgary.ca/start.html
+    	\begin{flushleft}
+    	E -> T $E_1$ \\
+    	$E_1$ -> and T $E_1$ | nand T $E_1$ | $\epsilon$ \\
+    	T -> F $T_1$ \\
+		T1 -> or F $T_1$ | nor F $T_1$ | epsilon \\
+		F -> ( E ) | !F | id \\
+		id -> true | false \\
+		\end{flushleft}
+
+    	This new grammar created using the rules specified in the slides describes
+    	the same language but allows a LL parser to be made.
+
+\end{document}

@@ -6,135 +6,159 @@ import java.util.ArrayList;
 
 public class JForStatement extends JStatement{
 
+    /* ArrayList of all the statements between the right parenthesis and the
+     * first semi-colon.
+     */
     private ArrayList<JStatement> initStatements;
+    /* Expression between the two semi-colons */
     private JExpression condition;
-    private ArrayList<JStatement> forIncr;
-    private JStatement statement;
+    /* ArrayList of all the statement between the last semi-colon and the
+     * right parenthesis.
+     */
+    private ArrayList<JStatement> endStatements;
+    /* Statement of the body of the loop */
+    private JStatement bodyStatement;
 
     /**
-     * Construct an AST node for a for loop.
-     * 
-     * @param line
-     *            line in which the expression occurs in the source file.
-     * @param forInit
-     *            the first part of the for-loop: initialisation.
-     * @param condition
-     *            the second part of the for-loop: true to continue.
-     * @param forIncr
-     *            the third part of the for-loop: what is modified each time.
-     * @param statement
-     *            the body.
+     * Constructor of a for-loop of type for( ... ; ... ; ...) in the AST.
+     * @param line line where the for-loop is written in the parsed class.
+     * @param initStatements part between the right parenthesis and the first
+     * semi-colon, reserved for the initialization.
+     * @param condition parts between the two semi-colons reserved for the
+     * condition expression.
+     * @param endStatements the statements executed at the end of each iteration
+     * @param bodyStatement the body of the for-loop
      */
 
-    public JForStatement(int line, ArrayList<JStatement> forInit,
-                         JExpression condition, ArrayList<JStatement> forIncr,
-                         JStatement statement) {
+    public JForStatement(int line,
+                         ArrayList<JStatement> initStatements,
+                         JExpression condition,
+                         ArrayList<JStatement> endStatements,
+                         JStatement bodyStatement) {
         super(line);
-        this.forInit = forInit;
+        this.initStatements = initStatements;
         this.condition = condition;
-        this.forIncr = forIncr;
-        this.statement = statement;
+        this.endStatements = endStatements;
+        this.bodyStatement = bodyStatement;
     }
 
     /**
-     * Analyze all 4 parts of the for expression: init, cond, incr, body
+     * Implements JAST abstract method to perform semantic analysis on this AST.
      *
-     * @param context
-     *            context in which names are resolved.
-     * @return the analyzed (and possibly rewritten) AST subtree.
+     * This method analyzes the three parts of the for-loop and its body.
+     *
+     * @param context the environment (scope) in which code is analyzed.
+     * @return this object as a JAST after the analyzation.
      */
     public JAST analyze(Context context) {
-        // init
-        if (forInit != null) {
-            for (JStatement init : forInit) {
-                init.analyze(context);
+        /* Analyzation of the statement(s) */
+        if (initStatements != null) {
+            for (JStatement initStatement : initStatements) {
+                initStatement.analyze(context);
             }
         }
 
-        // condition: a boolean (only one)
+        /* Analyzation of the condition */
         if (condition != null) {
             condition.analyze(context);
             condition.type().mustMatchExpected(line(), Type.BOOLEAN);
         }
 
-        // incr
-        if (forIncr != null) {
-            for (JStatement incr : forIncr) {
+        /* Analyzation of the statement(s) executed after each iteration */
+        if (endStatements != null) {
+            for (JStatement incr : endStatements) {
                 incr.analyze(context);
             }
         }
 
-        // the body
-        statement.analyze(context);
+        /* Analyzation of the body of the loop */
+        bodyStatement.analyze(context);
 
         return this;
     }
 
+    /**
+     * Implements the JAST abstract method to perform code generation.
+     *
+     * @param output
+     *            the code emitter (basically an abstraction for producing the
+     *            .class file).
+     */
+
     public void codegen(CLEmitter output) {
-        // Like the ConditionalExpression, we need two labels:
-        //  where is the 'condition' statement and the 'exit' one
-        String cond = output.createLabel();
-        String exit = output.createLabel();
-        if (forInit != null) {
-            for (JStatement init : forInit)
-                init.codegen(output);
+        /*
+         *
+         */
+        if (initStatements != null) {
+            for (JStatement initStatement : initStatements)
+                initStatement.codegen(output);
         }
 
-        // Branch out of the loop on the test condition
-        // being false
-        output.addLabel(cond);
-        if (condition != null)
-            condition.codegen(output, exit, false);
-
-        // the body
-        statement.codegen(output);
-        if (forIncr != null) {
-            for (JStatement update : forIncr)
-                update.codegen(output);
+        /* Code generation for the condition */
+        String conditionalLabel = output.createLabel();
+        String endLoopLabel = output.createLabel();
+        output.addLabel(conditionalLabel);
+        if (this.condition != null) {
+            this.condition.codegen(output, endLoopLabel, false);
         }
 
-        // End of the loop block, go back to the conditional part
-        output.addBranchInstruction(GOTO, cond);
+        /* Code generation for the body */
+        bodyStatement.codegen(output);
 
-        // Here it's the end
-        output.addLabel(exit);
+        /* Code generation for the statements executed after each iteration */
+        if (endStatements != null) {
+            for (JStatement endStatement : endStatements)
+                endStatement.codegen(output);
+        }
+
+        /* Adding a branch to go back to the condition */
+        output.addBranchInstruction(GOTO, conditionalLabel);
+
+        /* Adding the label of the end of the loop */
+        output.addLabel(endLoopLabel);
     }
 
     /**
-     * a writeToStdOut like the other
+     * Implements JAST abstract method to write the information pertaining to
+     * this AST to STDOUT.
+     *
+     * @param p
+     *            for pretty printing with indentation.
      */
+
     public void writeToStdOut(PrettyPrinter p) {
+        // I don't know where it is used, just re-writing code from JWhileStatement
         p.printf("<JForStatement line=\"%d\">\n", line());
         p.indentRight();
-            p.println("<Init>");
-            p.indentRight();
-                if (forInit != null) {
-                    for (JStatement init : forInit) {
-                        init.writeToStdOut(p);
+        p.println("<Init>");
+        p.indentRight();
+        if (initStatements != null) {
+                    for (JStatement initStatement : initStatements) {
+                        initStatement.writeToStdOut(p);
                     }
                 }
             p.indentLeft();
             p.println("</Init>");
-            p.println("<Condition>");
+            p.println("<TestExpression>");
             p.indentRight();
                 if (condition != null) {
                     condition.writeToStdOut(p);
                 }
             p.indentLeft();
-            p.println("</Condition>");
+            p.println("</TestExpression>");
             p.println("<Increment>");
             p.indentRight();
-                if (forIncr != null) {
+                if (endStatements != null) {
                     // hehe, we can use a foreach here :-)
-                    for (JStatement incr : forIncr) {
-                        incr.writeToStdOut(p);
+                    for (JStatement endStatement : endStatements) {
+                        endStatement.writeToStdOut(p);
                     }
                 }
             p.indentLeft();
             p.println("</Increment>");
             p.println("<Statement>");
             p.indentRight();
-                statement.writeToStdOut(p);
+                bodyStatement.writeToStdOut(p);
             p.indentLeft();
             p.println("</Statement>");
         p.indentLeft();
