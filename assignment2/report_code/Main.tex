@@ -1,21 +1,21 @@
 \documentclass[a4paper, 11pt]{article}
 
-\usepackage[french]{babel}
+\usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{placeins}
-\usepackage{qtree}
+%\usepackage{placeins}
+%\usepackage{qtree}
 \usepackage{csquotes}
 \usepackage{hyperref}
-\usepackage{amsmath}
-\usepackage{tikz}
-\usepackage{multicol}
-\usetikzlibrary{automata,arrows,positioning,shapes}
-\usepackage{graphicx}
+%\usepackage{amsmath}
+%\usepackage{tikz}
+%\usepackage{multicol}
+%\usetikzlibrary{automata,arrows,positioning,shapes}
+%\usepackage{graphicx}
 \usepackage{amsmath}
 %\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
-\graphicspath{{img/}}
+%\graphicspath{{img/}}
 
 \author{Florian Thuin \and Cyril de Vogelaere}
 \date{\today}
@@ -29,23 +29,29 @@
 \begin{document}
 
     \maketitle
-    \tableofcontents
+    %\tableofcontents
+
+    \begin{abstract}
+        Everything was submitted with the account of Cyril De Vogelaere.
+        However, some submissions were made by Florian Thuin but you can
+        ignore it. All the tests passed.
+    \end{abstract}
 
     \section{Recursive descent}
     \subsection{Changes to the grammar}
 
     	The current grammar is by no means $LL(1)$ as it is subject to both direct and
-    	indirect recursion. The grammar must thus be changed as follow to become $LL(1)$:
+    	indirect recursions. The grammar must thus be changed as follow to become $LL(1)$:
     	\newline
 
     	% En cas de besoin : http://smlweb.cpsc.ucalgary.ca/start.html
     	\begin{flushleft}
-    	E -> T $E_1$ \\
-    	$E_1$ -> and T $E_1$ | nand T $E_1$ | $\epsilon$ \\
-    	T -> F $T_1$ \\
-		T1 -> or F $T_1$ | nor F $T_1$ | epsilon \\
-		F -> ( E ) | !F | id \\
-		id -> true | false \\
+    	$E \rightarrow T\ E_1$ \\
+    	$E_1 \rightarrow and\ T\ E_1\ \mid\ nand\ T\ E_1 \mid \epsilon$ \\
+    	$T \rightarrow F\ T_1$ \\
+		$T1 \rightarrow or\ F\ T_1 \mid nor\ F\ T_1 \mid \epsilon$ \\
+		$F \rightarrow ( E ) \mid\ !F \mid id$ \\
+		$id \rightarrow true \mid false$ \\
 		\end{flushleft}
 
     	This new grammar created using the rules specified in the slides describes
@@ -53,45 +59,47 @@
     	implemented in our recursive descent parser.
 
     \section{Programming directly in Java bytecode}
-    
+
     	Programming the bytecode was rather straightforward as we could easily compare
     	our produced output with a correctly compiled class file. Running tests was similarly
-    	easy as we only had to compare the output of our file and the correct file, for a 
+    	easy as we only had to compare the output of our file and the correct file, for a
     	given set of inputs.
-    	
+
     \section{Multi-line comments}
 
 		Although the manual parsing part of the assignment was rather simple to
-		implement in scanner.java, the javaCC parser part was a bit bewildering at first.
+		implement in \verb#Scanner.java#, the javaCC parser part was a bit bewildering at first.
 		\newline
-		
-		Once it was understood however, thanks to some reading in the book, it became
-		rather easy as well. Our test quickly revealing the few bug that had escaped us,
-		such as a multi-line comment that ends with the file.
-		
-	\section{The two for loops}
-	
-		This part of the assignment was actually quite a challenge, we had the bad idea
-		to start with the j--.jj part rather than the simpler manual part.\newline
 
-		Another bad idea we had we to try to totally re-factor for each loop in
-		basic for loops. Which made sense at first as we could have had one line analyse
-		and code generation methods, but didn't in practice as we would need to 
-		insert code in the condition (for it to  initialize de variable before the body but
-		after the condition (avoiding overflows)). The remnant of that
-		mistake can still be seen in our code but we now properly implement
-		both methods and add a variable assignment at the correct position.\newline
-		
-		We eventually succeeded in both however by modifying parser.java, scanner.java,
-		 j--.jj, and by adding some tokens (especially the final token which was 
-		 to pass the tests) and
-		 some classes (JForStatement and JForeachStatement especially).\newline
-		 
-		At first, the test were failing as we were missing on too many cases on our
-		tests (loop that did nothing, parse error, overflows, ...), we eventually 
-		figured it out however, as you can see in our final code which passes all
-		the tests perfectly.
-		
-		
-		
+		Once it was understood however --- thanks to the reading of the book --- it became
+		rather easy as well. Our tests quickly revealed the few bugs that had escaped us,
+		such as a multi-line comments that ends with the file.
+
+	\section{The two for loops}
+
+		This part of the assignment was actually quite a challenge, we had the
+        bad idea to start with the \verb#j--.jj# part rather than the simpler
+        manual part (because the same reasoning applies on both parts but
+        the errors are more verbose with the Parser).\newline
+
+		Another bad idea we had was to try to totally refactor for-each loop in
+		basic for-loops. Which made sense at first as it would have allowed us
+        to avoid the writing two \verb#codegen# and \verb#analyze# methods, but didn't in practice because we need to initialize the variable at the
+        initialization of the loop and also after each iteration (we had a hard
+        time with this part because the error message was talking about
+        registers and it wasn't helpful). The remnant
+        of that mistake can still be seen in our code but we now properly
+        implement both methods and add a variable assignment at the correct
+        position (in the initialization of the loop and before the body).\newline
+
+		We eventually succeeded in both however by modifying \verb#Parser.java#,
+        \verb#Scanner.java#, \verb#j--.jj#, and by adding some tokens
+        (especially the modifiers) and some classes (\verb#JForStatement.java#
+        and \verb#JForeachStatement.java# especially).\newline
+
+		At first, the tests were failing as we were missing on too many cases on
+        our tests (loop that did nothing, parse error, overflows,\ldots), we
+        eventually figured it out however, as you can see in our final code
+        which passes all the tests perfectly.
+
 \end{document}
