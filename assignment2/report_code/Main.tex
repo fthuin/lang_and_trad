@@ -49,8 +49,49 @@
 		\end{flushleft}
 
     	This new grammar created using the rules specified in the slides describes
-    	the same language but allows a LL parser to be made.
+    	the same language but allows a LL parser to be made. This was the grammar
+    	implemented in our recursive descent parser.
 
     \section{Programming directly in Java bytecode}
+    
+    	Programming the bytecode was rather straightforward as we could easily compare
+    	our produced output with a correctly compiled class file. Running tests was similarly
+    	easy as we only had to compare the output of our file and the correct file, for a 
+    	given set of inputs.
+    	
+    \section{Multi-line comments}
 
+		Although the manual parsing part of the assignment was rather simple to
+		implement in scanner.java, the javaCC parser part was a bit bewildering at first.
+		\newline
+		
+		Once it was understood however, thanks to some reading in the book, it became
+		rather easy as well. Our test quickly revealing the few bug that had escaped us,
+		such as a multi-line comment that ends with the file.
+		
+	\section{The two for loops}
+	
+		This part of the assignment was actually quite a challenge, we had the bad idea
+		to start with the j--.jj part rather than the simpler manual part.\newline
+
+		Another bad idea we had we to try to totally re-factor for each loop in
+		basic for loops. Which made sense at first as we could have had one line analyse
+		and code generation methods, but didn't in practice as we would need to 
+		insert code in the condition (for it to  initialize de variable before the body but
+		after the condition (avoiding overflows)). The remnant of that
+		mistake can still be seen in our code but we now properly implement
+		both methods and add a variable assignment at the correct position.\newline
+		
+		We eventually succeeded in both however by modifying parser.java, scanner.java,
+		 j--.jj, and by adding some tokens (especially the final token which was 
+		 to pass the tests) and
+		 some classes (JForStatement and JForeachStatement especially).\newline
+		 
+		At first, the test were failing as we were missing on too many cases on our
+		tests (loop that did nothing, parse error, overflows, ...), we eventually 
+		figured it out however, as you can see in our final code which passes all
+		the tests perfectly.
+		
+		
+		
 \end{document}
