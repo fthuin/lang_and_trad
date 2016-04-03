@@ -1,0 +1,6 @@
+to: florian.thuin@gmail.com
+cc: cyril.devogelaere@student.uclouvain.be
+cci: batman@superman.vs
+subject: Hello World!
+text : ceci est un message \n //ceci est italique// \n __ceci est souligné__ \n **ceci est gras** \n ~~ceci est barré~~
+attachment: ...

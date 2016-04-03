@@ -1,0 +1,12 @@
+<to>florian.thuin@gmail.com</to>
+<cc>cyril.devogelaere@student.uclouvain.be</cc>
+<cci>superman@batman.vs</cci>
+<subject>Hello World!</subject>
+<body>
+	Bonjour !
+	
+	<b>Ce message est important !</b>
+	
+	<i>Merci de ne pas y répondre</i>
+</body>
+<attachment src="..."/>
