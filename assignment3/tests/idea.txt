@@ -1,0 +1,15 @@
+Message creation
+
+
+Send Message from x to y and z and a and b ....
+
+ou Send Message to x (from implied from settings)
+
+ou Send Message to x,y,z,a,b,...
+
+Message
+ 
+Message attach attachement1 + 2 + 3
+
+
+ 

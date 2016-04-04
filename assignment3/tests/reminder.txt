@@ -1,0 +1,6 @@
+Important objects
+
+Properties - For smtp server, could be set by default
+Session - passed in argument when creating a message
+Message - Where the magic happens
+Transport.send
