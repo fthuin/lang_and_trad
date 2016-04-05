@@ -1,7 +1,8 @@
 package main.scala.example
 
-import main.scala.code.MessageBuilder
-import main.scala.code.DSLconstants._
+import main.scala.dslcode.MessageBuilder
+import main.scala.constant.DefaultDSLconstants._
+import main.scala.settings.DefaultMailSettings
 
 /**
   * Created by Cyril on 04-04-16.
@@ -13,7 +14,7 @@ object basicMessageSyntaxicSugar {
     val toAddr: String = "abcd@gmail.com"
     val fromAddr: String = "web@gmail.com"
 
-    val message = MessageBuilder()
+    val message = MessageBuilder(DefaultMailSettings)
 
     message from (fromAddr + ", Hello@GB.com")
     message add_from "myLittlePony@ponyland.fr"
@@ -45,15 +46,21 @@ object basicMessageSyntaxicSugar {
 }
 
 /*
- * TODO
- * gerer gras, italique, ...
- * Dossier ou tout les mails sont exécutés
- * Script pour éviter le main bidule
- * Settings
- * try catch des erreurs + vérifier adresses en fonction des settings
- * And cc_to ... (pour avoir tout sur la même ligne)
- * Virer les parenthèses pour les unary
- * headers
+ * TODO easy
+ *
+ * Dossier ou tout les mails sont exécutés, with a bulksend method
  * reply, reply to
  * Attachments
+ * headers
+ *
+ * TODO hard
+ *
+ * gerer gras, italique, ...
+ * And cc_to ... (pour avoir tout sur la même ligne)
+ * Script pour éviter le main bidule //TODO savoir si c'est possible
+ *
+ * TODO but I don't see how
+ *
+ * Virer les parenthèses pour les unary
+ *
  */
