@@ -17,4 +17,11 @@ trait MailSettings{
   //Put this variable at true will skip all addresses error and send email anyway.
   //Putting it to false will stop the execution once an error is detected.
   val ShouldSkipAddressesOnError = true
+
+  //Put this variable at true will generate an exception in case of address error, stopping the execution.
+  //This setting will be ignored if ShouldSkipAddressesOnError is put to true
+  val ShouldGenerateExceptionOnError = false
+
+  //Putting this variable to false will generate an error instead of sending the message
+  var noMistakesBeforeSending = true
 }

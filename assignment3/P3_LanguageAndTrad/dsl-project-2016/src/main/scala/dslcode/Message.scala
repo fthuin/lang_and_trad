@@ -129,15 +129,26 @@ trait MessageInterface extends LibraryMimeMessage {
     this.setContent(mailText.toString(), "text/html")
   }
 
+  def add_line(s: String) = {
+    this.add_text(s + "\n")
+  }
+
   def add(c: Char) = {
     this.add_text(c.toString)
+  }
+
+  def add(s: String) = {
+    this.add_text(s)
   }
 
   //Send message
 
   def send: Unit ={
-    Transport.send(this)
-    System.out.println("Sent message successfully....")
+    if(settings.noMistakesBeforeSending) {
+      Transport.send(this)
+      System.out.println("Sent message successfully....")
+    }
+    else System.out.println("Some error remain, no message was sent....")
   }
 }
 

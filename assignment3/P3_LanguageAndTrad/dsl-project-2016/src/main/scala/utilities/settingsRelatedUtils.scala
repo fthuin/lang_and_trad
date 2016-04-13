@@ -15,7 +15,14 @@ class settingsRelatedUtils(mailSetting: MailSettings) {
    */
   def printErrorLine(error: String, addr: String){
     if(mailSetting.ShouldSkipAddressesOnError) println(error + ": '" + addr + "' is not a valid address ! This address was skipped")
-    else throw new Exception(error + ": '" + addr + "' is not a valid address !")
+    else if(mailSetting.ShouldGenerateExceptionOnError) {
+      mailSetting.noMistakesBeforeSending = false
+      throw new Exception(error + ": '" + addr + "' is not a valid address !")
+    }
+    else {
+      mailSetting.noMistakesBeforeSending = false
+      println(error + ": '" + addr + "' is not a valid address ! Please correct this error to send the message")
+    }
   }
 
   /*

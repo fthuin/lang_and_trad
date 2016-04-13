@@ -39,6 +39,8 @@ object basicMessageSyntaxicSugar {
     message add_text "poney"
     message add new_line
     message add space
+    message add_line "Hello new york !"
+    message add "J'aimes les gentils "
     message add_text "petit poney"
 
     message send
