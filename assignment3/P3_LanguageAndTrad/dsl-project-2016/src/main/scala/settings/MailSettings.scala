@@ -1,5 +1,8 @@
 package main.scala.settings
 
+import javax.mail.internet.{MimeMessage => LibraryMimeMessage}
+import main.scala.dslcode.MessageBuilder
+
 /**
   * Created by Cyril on 05-04-16.
   */
@@ -24,4 +27,9 @@ trait MailSettings{
 
   //Putting this variable to false will generate an error instead of sending the message
   var noMistakesBeforeSending = true
+
+  //Default message
+  def getDefaultMessage(): LibraryMimeMessage = {
+    return MessageBuilder()
+  }
 }

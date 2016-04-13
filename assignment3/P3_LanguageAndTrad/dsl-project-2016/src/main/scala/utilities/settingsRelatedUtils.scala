@@ -7,7 +7,7 @@ import scala.Array._
 /**
   * Created by Cyril on 05-04-16.
   */
-class settingsRelatedUtils(mailSetting: MailSettings) {
+class settingsRelatedUtils(mailSetting: MailSettings){
 
   /*
    * Depending on settings, either stop execution after printing the error

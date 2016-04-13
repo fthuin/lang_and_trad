@@ -1,49 +1,46 @@
 package main.scala.example
 
-import main.scala.dslcode.MessageBuilder
+import main.scala.dslcode.MessageInterface
 import main.scala.constant.DefaultDSLconstants._
-import main.scala.settings.DefaultMailSettings
 
 /**
   * Created by Cyril on 04-04-16.
   */
-object basicMessageSyntaxicSugar {
+object basicMessageSyntaxicSugar extends MessageInterface{
 
   def main(args: Array[String]) {
 
     val toAddr: String = "abcd@gmail.com"
     val fromAddr: String = "web@gmail.com"
 
-    val message = MessageBuilder(DefaultMailSettings)
+    from(fromAddr + ", Hello@GB.com" and "myLittlePony@ponyland.fr")
+    add_from("dash@ponyland.fr", "rainbow@ponyland.fr")
+    add_from("he-man#musclor.hello")
+    add_from("he-man#musclor.hello", "superman@batman.robin")
 
-    message from (fromAddr + ", Hello@GB.com")
-    message add_from "myLittlePony@ponyland.fr"
-    message add_from ("dash@ponyland.fr", "rainbow@ponyland.fr")
-    message add_from "he-man#musclor.hello"
-    message add_from ("he-man#musclor.hello", "superman@batman.robin")
+    to("poney@furry.com", toAddr)
+    add_to("mario@luigi.com") //TODO and cc_to "bidule"
+    add_to("nope.poke")
+    add_to("abc, def, ghi, jkl", "mno", "pqr, stu   ", "vwxyz")
 
-    message to ("poney@furry.com", toAddr)
-    message add_to "mario@luigi.com" //and cc_to "bidule"
-    message add_to "nope.poke"
-    message add_to ("abc, def, ghi, jkl", "mno", "pqr, stu   ", "vwxyz")
+    cc_to("azerty" and "beatrice")
+    add_cc("uiop")
 
-    message cc_to "azerty"
-    message add_cc "uiop"
+    bcc_to("qsdfghj")
+    add_bcc("klm")
 
-    message bcc_to "qsdfghj"
-    message add_bcc "klm"
+    set_subject("My subject")
 
-    message set_subject "My subject"
+    set_text("<h1>Hello</h1>" in bold and italic)
+    add(space)
+    add_text("poney" in italic)
+    add(new_line)
+    add(space)
+    add_line("Hello new york !" in bold)
+    add("J'aimes les gentils ")
+    add_text("petit poney")
 
-    message set_text "<h1>Hello</h1>"
-    message add_text "poney"
-    message add new_line
-    message add space
-    message add_line "Hello new york !"
-    message add "J'aimes les gentils "
-    message add_text "petit poney"
-
-    message send
+    send
   }
 }
 
@@ -57,8 +54,6 @@ object basicMessageSyntaxicSugar {
  *
  * TODO hard
  *
- * gerer gras, italique, ...
- * And cc_to ... (pour avoir tout sur la même ligne)
  * Script pour éviter le main bidule //TODO savoir si c'est possible
  *
  * TODO but I don't see how
