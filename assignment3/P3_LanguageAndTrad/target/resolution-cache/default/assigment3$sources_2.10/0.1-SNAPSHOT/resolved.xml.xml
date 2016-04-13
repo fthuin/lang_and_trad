@@ -4,7 +4,7 @@
 		module="assigment3$sources_2.10"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20160405134708"
+		publication="20160411184725"
 	/>
 	<configurations>
 		<conf name="compile" visibility="public" description=""/>

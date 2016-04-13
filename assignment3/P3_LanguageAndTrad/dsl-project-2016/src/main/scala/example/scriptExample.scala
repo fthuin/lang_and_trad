@@ -1,4 +1,4 @@
-
+/*
 import main.scala.dslcode.MessageBuilder
 import main.scala.constant.DefaultDSLconstants._
 import main.scala.settings.DefaultMailSettings
@@ -34,3 +34,4 @@ message add space
 message add_text "petit poney"
 
 message send()
+*/

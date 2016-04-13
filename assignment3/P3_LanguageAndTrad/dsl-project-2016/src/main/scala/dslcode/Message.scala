@@ -38,7 +38,7 @@ trait MessageInterface extends LibraryMimeMessage {
     }
   }
 
-  def clear_from(): Unit ={
+  def clear_from: Unit ={
     this.setFrom(null : String) //Makes from field empty, fake smtp fills with some bullshit, but in mail it's clean
   }
 
@@ -50,14 +50,14 @@ trait MessageInterface extends LibraryMimeMessage {
   //TO handling
 
   def to(addr: String*) = {
-    this.clear_to()
+    this.clear_to
     val addrs = utilInstance.ArrayStringSplitter(addr.toArray)
     for(elem <- addrs) {
       this.addRecipient(LibraryMessage.RecipientType.TO, new InternetAddress(elem))
     }
   }
 
-  def clear_to(): Unit ={
+  def clear_to: Unit ={
     this.setRecipients(LibraryMessage.RecipientType.TO, null : String)
   }
 
@@ -71,14 +71,14 @@ trait MessageInterface extends LibraryMimeMessage {
   //CC handling
 
   def cc_to(addr: String*) = {
-    this.clear_cc()
+    this.clear_cc
     val addrs = utilInstance.ArrayStringSplitter(addr.toArray)
     for(elem <- addrs) {
       this.addRecipient(LibraryMessage.RecipientType.CC, new InternetAddress(elem))
     }
   }
 
-  def clear_cc(): Unit ={
+  def clear_cc: Unit ={
     this.setRecipients(LibraryMessage.RecipientType.CC, null : String)
   }
 
@@ -92,14 +92,14 @@ trait MessageInterface extends LibraryMimeMessage {
   //BCC handling
 
   def bcc_to(addr: String*) = {
-    this.clear_bcc()
+    this.clear_bcc
     val addrs = utilInstance.ArrayStringSplitter(addr.toArray)
     for(elem <- addrs) {
       this.addRecipient(LibraryMessage.RecipientType.BCC, new InternetAddress(elem))
     }
   }
 
-  def clear_bcc(): Unit ={
+  def clear_bcc: Unit ={
     this.setRecipients(LibraryMessage.RecipientType.BCC, null : String)
   }
 
@@ -135,7 +135,7 @@ trait MessageInterface extends LibraryMimeMessage {
 
   //Send message
 
-  def send(): Unit ={
+  def send: Unit ={
     Transport.send(this)
     System.out.println("Sent message successfully....")
   }

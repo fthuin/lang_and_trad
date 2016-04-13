@@ -41,7 +41,7 @@ object basicMessageSyntaxicSugar {
     message add space
     message add_text "petit poney"
 
-    message send()
+    message send
   }
 }
 
