@@ -4,6 +4,8 @@ import main.scala.dslcode.MessageInterface
 import main.scala.constant.DefaultDSLconstants._
 import main.scala.settings._
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
   * Created by Cyril on 04-04-16.
   */
@@ -11,7 +13,7 @@ object basicMessageSyntaxicSugar extends MessageInterface{
 
   def main(args: Array[String]) {
 
-    selectMailSettings(BlockingErrorMailSettings)
+    selectMailSettings(DefaultMailSettings)
 
     val toAddr: String = "abcd@gmail.com"
     val fromAddr: String = "web@gmail.com"
@@ -43,12 +45,30 @@ object basicMessageSyntaxicSugar extends MessageInterface{
     add("J'aimes les gentils ")
     add_text("petit poney")
 
+    var parts = ArrayBuffer[(String, String, String)]()
+    //val poney: String = ("Coucou", "Coucou")
+    //println(poney)
+    parts += (("cyril.devogelaere@poneycity.be", "Cyril de Vogelaere", "vendredi 23 avril at 2pm"))
+
+    clearAll
+
+    repeat {
+      (email,name,date) => {
+        to(email)
+        add_text("Hello " + name + ",\n\n")
+        add_text("Your oral exam for the course LINGI2132 will take place at BARB12 on ")
+        add_text(date in bold)
+        add_text("\n")
+        send
+      }
+    } foreach parts
+
     /*
     clearAll
     add_to("poney@ucl.be")
     set_text("hello")
     */
-    send
+    //send
   }
 }
 
@@ -78,3 +98,16 @@ object basicMessageSyntaxicSugar extends MessageInterface{
  * FOREACH
  *
  */
+
+
+/*
+class Repeat(block: => Unit) {
+  def foreach(block: Unit): Unit = ???
+}
+
+object repeat {
+  def apply(block: => Unit): Repeat = {
+    new Repeat(block)
+  }
+}
+*/

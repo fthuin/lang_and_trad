@@ -15,7 +15,7 @@ trait MailSettings{
   val SMTPport = 2525
 
   //This variable contains a scala regex that checks the validity of email addresses
-  val EmailValidityRegex = """(\w+)@([\w\.]+)""" //http://stackoverflow.com/questions/13912597/validate-email-one-liner-in-scala
+  val EmailValidityRegex = """([\w\.]+)@([\w\.]+)""" //http://stackoverflow.com/questions/13912597/validate-email-one-liner-in-scala
 
   //Put this variable at true will skip all addresses error and send email anyway.
   //Putting it to false will stop the execution once an error is detected.
@@ -28,8 +28,13 @@ trait MailSettings{
   //Putting this variable to false will generate an error instead of sending the message
   var errorAllowedForSending = true
 
+  val auth = false
+  val username = ""
+  val password = ""
+  val tls = false
+
   //Default message
-  def getDefaultMessage(): LibraryMimeMessage = {
-    return MessageBuilder()
+  def getMessage(): LibraryMimeMessage = {
+    MessageBuilder(this)
   }
 }

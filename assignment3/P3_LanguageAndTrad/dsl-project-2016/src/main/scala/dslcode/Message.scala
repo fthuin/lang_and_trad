@@ -12,6 +12,8 @@ import main.scala.settings.{DefaultMailSettings, MailSettings}
 import main.scala.utilities.settingsRelatedUtils
 import main.scala.utilities.staticUtils
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
   * Created by Cyril on 04-04-16.
   *
@@ -25,7 +27,7 @@ trait MessageInterface{
   var settings: MailSettings = DefaultMailSettings
   var utilInstance = new settingsRelatedUtils(settings)
   var mailText : StringBuilder = new StringBuilder()
-  var message = settings.getDefaultMessage()
+  var message = settings.getMessage()
 
   //FROM handling
 
@@ -156,7 +158,7 @@ trait MessageInterface{
 
   def clearAll(): Unit ={
     mailText = new StringBuilder()
-    message = settings.getDefaultMessage()
+    message = settings.getMessage()
   }
 
   //Select settings
@@ -164,9 +166,19 @@ trait MessageInterface{
   def selectMailSettings(newSettings: MailSettings): Unit ={
     settings = newSettings
     utilInstance =  new settingsRelatedUtils(settings)
-    message = settings.getDefaultMessage()
+    message = settings.getMessage()
     mailText = new StringBuilder()
   }
+
+  // Custom repeat loop
+  def repeat(command: (String, String, String) => Unit) = new {
+    def foreach(tuples: => ArrayBuffer[(String, String, String)]): Unit = {
+      for ((part1, part2, part3) <- tuples) {
+        command(part1, part2, part3)
+      }
+    }
+  }
+
 }
 
 /*
@@ -180,15 +192,27 @@ object MessageBuilder {
   //DSL basic constructor
 
   def apply(): LibraryMimeMessage = {
+    apply(DefaultMailSettings)
+  }
 
-    apply(DefaultMailSettings.SMTPhost, DefaultMailSettings.SMTPport)
+  def apply(settings: MailSettings) : LibraryMimeMessage = {
+    if (settings.auth) {
+      val props: Properties = new java.util.Properties()
+      props.put("mail.smtp.auth", settings.auth.toString)
+      props.put("mail.smtp.starttls.enable", settings.tls.toString)
+      props.put("mail.smtp.host",  settings.SMTPhost)
+      props.put("mail.smtp.port", settings.SMTPport.toString)
+      apply(props, settings.username, settings.password)
+    } else {
+      apply(settings.SMTPhost, settings.SMTPport)
+    }
   }
 
   def apply(host : String, port : Int): LibraryMimeMessage = {
 
     val properties: Properties = System.getProperties
-    properties.setProperty("mail.smtp.host", host)
-    properties.setProperty("mail.smtp.port", port.toString)
+    properties.put("mail.smtp.host", host)
+    properties.put("mail.smtp.port", port.toString)
 
     apply(properties)
   }
@@ -201,22 +225,25 @@ object MessageBuilder {
   //DSL constructor with basic security feature
 
   def apply(username: String, password : String): LibraryMimeMessage = {
+    apply(username, password, DefaultMailSettings)
+  }
 
-    apply(DefaultMailSettings.SMTPhost, DefaultMailSettings.SMTPport, username, password)
+  def apply(username: String, password: String, settings: MailSettings): LibraryMimeMessage = {
+    apply(settings.SMTPhost, settings.SMTPport, username, password)
   }
 
   def apply(host : String, port : Int, username: String, password : String): LibraryMimeMessage = {
 
     val properties: Properties = System.getProperties
-    properties.setProperty("mail.smtp.host", host)
-    properties.setProperty("mail.smtp.port", port.toString)
-    properties.put("mail.pop3s.starttls.enable", "true"); //To enable transport layer security
+    properties.put("mail.smtp.auth", "true")
+    properties.put("mail.smtp.host", host)
+    properties.put("mail.smtp.port", port.toString)
+    properties.put("mail.smtp.starttls.enable", "true"); //To enable transport layer security
 
     apply(properties, username, password)
   }
 
   def apply(properties: Properties, username: String, password : String): LibraryMimeMessage = {
-
     val session: Session = Session.getInstance(properties, staticUtils.getAuthenticator(username, password))
     apply(session)
   }
@@ -226,4 +253,26 @@ object MessageBuilder {
   def apply(libraryMimeMessage: LibraryMimeMessage): LibraryMimeMessage = new LibraryMimeMessage(libraryMimeMessage)
   def apply(session: Session): LibraryMimeMessage = new LibraryMimeMessage(session)
   def apply(session: Session, inputStream: InputStream): LibraryMimeMessage = new LibraryMimeMessage(session, inputStream)
+
+  /*
+  def apply(settings: MailSettings) : LibraryMimeMessage = {
+    apply(settings, settings.SMTPhost, settings.SMTPport)
+  }
+
+  def apply(settings: MailSettings, host: String, port: Int) : LibraryMimeMessage = {
+    val properties: Properties = System.getProperties
+    properties.put("mail.smtp.host", host)
+    properties.put("mail.smtp.port", port.toString)
+    apply(settings, properties)
+  }
+
+  def apply(settings: MailSettings, properties: Properties) : LibraryMimeMessage = {
+    val session: Session = Session.getDefaultInstance(properties)
+    apply(settings, session)
+  }
+
+  def apply(settings: MailSettings, session: Session) : LibraryMimeMessage = {
+    new LibraryMimeMessage(session)
+  }
+  */
 }
