@@ -19,7 +19,7 @@ object basicMessageSyntaxicSugar extends MessageInterface{
     add_from("he-man#musclor.hello", "superman@batman.robin")
 
     to("poney@furry.com", toAddr)
-    add_to("mario@luigi.com") //TODO and cc_to "bidule"
+    add_to("mario@luigi.com")
     add_to("nope.poke")
     add_to("abc, def, ghi, jkl", "mno", "pqr, stu   ", "vwxyz")
 
@@ -40,7 +40,10 @@ object basicMessageSyntaxicSugar extends MessageInterface{
     add("J'aimes les gentils ")
     add_text("petit poney")
 
+    clearAll
+    add_to("poney@ucl.be")
     send
+    //TODO make a clear
   }
 }
 

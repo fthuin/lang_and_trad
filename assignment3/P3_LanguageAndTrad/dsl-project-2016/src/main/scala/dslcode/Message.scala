@@ -143,13 +143,29 @@ trait MessageInterface{
   }
 
   //Send message
-
   def send(): Unit ={
-    if(settings.noMistakesBeforeSending) {
-      Transport.send(message)
-      System.out.println("Sent message successfully....")
+    try {
+      if (settings.noMistakesBeforeSending) {
+        Transport.send(message)
+        System.out.println("Sent message successfully....")
+      }
+      else System.out.println("Some error remain, no message was sent....")
     }
-    else System.out.println("Some error remain, no message was sent....")
+    catch{
+      case e:javax.mail.MessagingException => {
+        if (e.getNextException().toString().contains("No MimeMessage content")) {
+          println("Impossible to send, no message content")
+        }
+        else {
+          e.printStackTrace()
+        }
+      }
+    }
+  }
+
+  //Clear everything
+  def clearAll(): Unit ={
+    message = settings.getDefaultMessage()
   }
 }
 
