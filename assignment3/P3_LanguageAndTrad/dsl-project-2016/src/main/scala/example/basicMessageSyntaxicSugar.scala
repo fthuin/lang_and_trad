@@ -2,6 +2,7 @@ package main.scala.example
 
 import main.scala.dslcode.MessageInterface
 import main.scala.constant.DefaultDSLconstants._
+import main.scala.settings._
 
 /**
   * Created by Cyril on 04-04-16.
@@ -9,6 +10,8 @@ import main.scala.constant.DefaultDSLconstants._
 object basicMessageSyntaxicSugar extends MessageInterface{
 
   def main(args: Array[String]) {
+
+    selectMailSettings(BlockingErrorMailSettings)
 
     val toAddr: String = "abcd@gmail.com"
     val fromAddr: String = "web@gmail.com"
@@ -40,9 +43,11 @@ object basicMessageSyntaxicSugar extends MessageInterface{
     add("J'aimes les gentils ")
     add_text("petit poney")
 
+    /*
     clearAll
     add_to("poney@ucl.be")
     set_text("hello")
+    */
     send
   }
 }
@@ -54,5 +59,22 @@ object basicMessageSyntaxicSugar extends MessageInterface{
  * reply, reply to
  * Attachments
  * headers
+ *
+ * TODO
+ *
+ * faire du currying qq part (slide 46 intro)
+ * Call by name slide 10 by name implicits
+ * Monads (map, flatmap, withfilters)
+ * implicit variable ?
+ * replace null by option if we have some at some points
+ *
+ * TODO ce qu'on a
+ *
+ * FACTORY METHOD
+ * PATTERN MATCHING
+ * IMPLICIT CLASSES
+ * SELECTIVE IMPORTS
+ * TRAIT
+ * FOREACH
  *
  */

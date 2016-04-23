@@ -53,9 +53,7 @@ trait MessageInterface{
   def to(addr: String*) = {
     this.clear_to()
     val addrs = utilInstance.ArrayStringSplitter(addr.toArray)
-    for(elem <- addrs) {
-      message.addRecipient(LibraryMessage.RecipientType.TO, new InternetAddress(elem))
-    }
+    addrs.foreach(elem => message.addRecipient(LibraryMessage.RecipientType.TO, new InternetAddress(elem)))
   }
 
   def clear_to(): Unit ={
@@ -64,9 +62,7 @@ trait MessageInterface{
 
   def add_to(addr: String*) = {
     val addrs = utilInstance.ArrayStringSplitter(addr.toArray)
-    for(elem <- addrs) {
-      message.addRecipient(LibraryMessage.RecipientType.TO, new InternetAddress(elem))
-    }
+    addrs.foreach(elem => message.addRecipient(LibraryMessage.RecipientType.TO, new InternetAddress(elem)))
   }
 
   //CC handling
@@ -74,9 +70,7 @@ trait MessageInterface{
   def cc_to(addr: String*) = {
     this.clear_cc()
     val addrs = utilInstance.ArrayStringSplitter(addr.toArray)
-    for(elem <- addrs) {
-      message.addRecipient(LibraryMessage.RecipientType.CC, new InternetAddress(elem))
-    }
+    addrs.foreach(elem => message.addRecipient(LibraryMessage.RecipientType.CC, new InternetAddress(elem)))
   }
 
   def clear_cc(): Unit ={
@@ -85,9 +79,7 @@ trait MessageInterface{
 
   def add_cc(addr: String*) = {
     val addrs = utilInstance.ArrayStringSplitter(addr.toArray)
-    for(elem <- addrs) {
-      message.addRecipient(LibraryMessage.RecipientType.CC, new InternetAddress(elem))
-    }
+    addrs.foreach(elem => message.addRecipient(LibraryMessage.RecipientType.CC, new InternetAddress(elem)))
   }
 
   //BCC handling
@@ -95,9 +87,7 @@ trait MessageInterface{
   def bcc_to(addr: String*) = {
     this.clear_bcc()
     val addrs = utilInstance.ArrayStringSplitter(addr.toArray)
-    for(elem <- addrs) {
-      message.addRecipient(LibraryMessage.RecipientType.BCC, new InternetAddress(elem))
-    }
+    addrs.foreach(elem => message.addRecipient(LibraryMessage.RecipientType.BCC, new InternetAddress(elem)))
   }
 
   def clear_bcc(): Unit ={
@@ -106,9 +96,7 @@ trait MessageInterface{
 
   def add_bcc(addr: String*) = {
     val addrs = utilInstance.ArrayStringSplitter(addr.toArray)
-    for(elem <- addrs) {
-      message.addRecipient(LibraryMessage.RecipientType.BCC, new InternetAddress(elem))
-    }
+    addrs.foreach(elem => message.addRecipient(LibraryMessage.RecipientType.BCC, new InternetAddress(elem)))
   }
 
   //Subject handling
@@ -143,6 +131,7 @@ trait MessageInterface{
   }
 
   //Send message
+
   def send(): Unit ={
     try {
       if (settings.errorAllowedForSending) {
@@ -163,14 +152,26 @@ trait MessageInterface{
     }
   }
 
-  //Clear everything
+  //Clear all message content
+
   def clearAll(): Unit ={
     mailText = new StringBuilder()
     message = settings.getDefaultMessage()
   }
+
+  //Select settings
+
+  def selectMailSettings(newSettings: MailSettings): Unit ={
+    settings = newSettings
+    utilInstance =  new settingsRelatedUtils(settings)
+    message = settings.getDefaultMessage()
+    mailText = new StringBuilder()
+  }
 }
 
 /*
+ * FACTORY METHOD
+ *
  * This object as no other purpose but to call the correct constructor of the java class to create our MimeMessage object.
  * The created object as the MessageInterface trait methods, thus implementing the DSL
  */
@@ -220,44 +221,9 @@ object MessageBuilder {
     apply(session)
   }
 
-  //DSL with settings
-
-  def apply(setting: MailSettings): LibraryMimeMessage = {
-
-    apply(setting, setting.SMTPhost, setting.SMTPport)
-  }
-
-  def apply(setting: MailSettings, host : String, port : Int): LibraryMimeMessage  = {
-
-    val properties: Properties = System.getProperties
-    properties.setProperty("mail.smtp.host", host)
-    properties.setProperty("mail.smtp.port", port.toString)
-
-    apply(setting, properties)
-  }
-
-  def apply(setting: MailSettings, properties: Properties): LibraryMimeMessage = {
-    val session: Session = Session.getDefaultInstance(properties)
-    apply(setting, session)
-  }
-
   //Basic javamail constructors
 
   def apply(libraryMimeMessage: LibraryMimeMessage): LibraryMimeMessage = new LibraryMimeMessage(libraryMimeMessage)
   def apply(session: Session): LibraryMimeMessage = new LibraryMimeMessage(session)
   def apply(session: Session, inputStream: InputStream): LibraryMimeMessage = new LibraryMimeMessage(session, inputStream)
-
-  //Basic javamail constructor with custom setting
-
-  def apply(setting: MailSettings, libraryMimeMessage: LibraryMimeMessage): LibraryMimeMessage = {
-    new LibraryMimeMessage(libraryMimeMessage)
-  }
-
-  def apply(setting: MailSettings, session: Session): LibraryMimeMessage = {
-    new LibraryMimeMessage(session)
-  }
-
-  def apply(setting: MailSettings, session: Session, inputStream: InputStream): LibraryMimeMessage = {
-    new LibraryMimeMessage(session, inputStream)
-  }
 }

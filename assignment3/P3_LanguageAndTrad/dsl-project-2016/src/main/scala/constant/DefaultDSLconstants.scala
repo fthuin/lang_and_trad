@@ -24,14 +24,10 @@ object DefaultDSLconstants {
     //To put a string in bold, italic, ...
     //In case of invalid parameter, return string without changes
     def in(value : Int): String ={
-      if(value == italic){
-        return "<i>" + s + "</i>"
-      }
-      else if(value == bold){
-        return "<strong>" + s + "</strong>"
-      }
-      else{
-        return s
+      value match {
+        case i : Int if i == italic => "<i>" + s + "</i>"
+        case i : Int if i == bold => "<strong>" + s + "</strong>"
+        case _ => s
       }
     }
 
