@@ -26,7 +26,7 @@ trait MailSettings{
   val ShouldGenerateExceptionOnError = false
 
   //Putting this variable to false will generate an error instead of sending the message
-  var noMistakesBeforeSending = true
+  var errorAllowedForSending = true
 
   //Default message
   def getDefaultMessage(): LibraryMimeMessage = {

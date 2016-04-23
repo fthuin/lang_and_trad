@@ -145,7 +145,7 @@ trait MessageInterface{
   //Send message
   def send(): Unit ={
     try {
-      if (settings.noMistakesBeforeSending) {
+      if (settings.errorAllowedForSending) {
         Transport.send(message)
         System.out.println("Sent message successfully....")
       }
@@ -165,6 +165,7 @@ trait MessageInterface{
 
   //Clear everything
   def clearAll(): Unit ={
+    mailText = new StringBuilder()
     message = settings.getDefaultMessage()
   }
 }
@@ -249,11 +250,11 @@ object MessageBuilder {
   //Basic javamail constructor with custom setting
 
   def apply(setting: MailSettings, libraryMimeMessage: LibraryMimeMessage): LibraryMimeMessage = {
-    new LibraryMimeMessage(libraryMimeMessage) with MessageInterface
+    new LibraryMimeMessage(libraryMimeMessage)
   }
 
   def apply(setting: MailSettings, session: Session): LibraryMimeMessage = {
-    new LibraryMimeMessage(session) with MessageInterface
+    new LibraryMimeMessage(session)
   }
 
   def apply(setting: MailSettings, session: Session, inputStream: InputStream): LibraryMimeMessage = {

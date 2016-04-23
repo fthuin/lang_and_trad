@@ -42,8 +42,8 @@ object basicMessageSyntaxicSugar extends MessageInterface{
 
     clearAll
     add_to("poney@ucl.be")
+    set_text("hello")
     send
-    //TODO make a clear
   }
 }
 
@@ -54,13 +54,5 @@ object basicMessageSyntaxicSugar extends MessageInterface{
  * reply, reply to
  * Attachments
  * headers
- *
- * TODO hard
- *
- * Script pour éviter le main bidule //TODO savoir si c'est possible
- *
- * TODO but I don't see how
- *
- * Virer les parenthèses pour les unary
  *
  */
