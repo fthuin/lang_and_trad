@@ -138,9 +138,11 @@ trait MessageInterface{
     try {
       if (settings.errorAllowedForSending) {
         Transport.send(message)
-        System.out.println("Sent message successfully....")
+        val recipients: String = message.getAllRecipients.flatMap(x => x.toString).mkString(", ")
+        println("Message sent successfully on " + message.getSentDate + " from " + message.getSender.toString + " to " + recipients)
+
       }
-      else System.out.println("Some error remain, no message was sent....")
+      else println("Some error remain, no message was sent....")
     }
     catch{
       case e:javax.mail.MessagingException => {
@@ -150,6 +152,9 @@ trait MessageInterface{
         else {
           e.printStackTrace()
         }
+      }
+      case e:java.lang.NullPointerException => {
+        println("Message sent succesfully.")
       }
     }
   }
@@ -170,6 +175,22 @@ trait MessageInterface{
     mailText = new StringBuilder()
   }
 
+  // Custom repeat loop
+  def repeat(command: (String) => Unit) = new {
+    def foreach(tuples: => ArrayBuffer[(String)]): Unit = {
+      for ((part1) <- tuples) {
+        command(part1)
+      }
+    }
+  }
+  // Custom repeat loop
+  def repeat(command: (String, String) => Unit) = new {
+    def foreach(tuples: => ArrayBuffer[(String, String)]): Unit = {
+      for ((part1, part2) <- tuples) {
+        command(part1, part2)
+      }
+    }
+  }
   // Custom repeat loop
   def repeat(command: (String, String, String) => Unit) = new {
     def foreach(tuples: => ArrayBuffer[(String, String, String)]): Unit = {
@@ -275,4 +296,7 @@ object MessageBuilder {
     new LibraryMimeMessage(session)
   }
   */
+
+  def getSentDate() : String = ???
+  def getSender() : String = ???
 }

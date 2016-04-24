@@ -10,6 +10,6 @@ object GoogleMailSettings extends MailSettings {
   override val tls = true
 
   override val username = "grosbras2"
-  override val password = "JDK231092"
+  override val password = "toset"
 
 }

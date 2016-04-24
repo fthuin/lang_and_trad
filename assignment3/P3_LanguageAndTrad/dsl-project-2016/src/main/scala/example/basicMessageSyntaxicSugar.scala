@@ -45,20 +45,25 @@ object basicMessageSyntaxicSugar extends MessageInterface{
     add("J'aimes les gentils ")
     add_text("petit poney")
 
+    send
+
     var parts = ArrayBuffer[(String, String, String)]()
     //val poney: String = ("Coucou", "Coucou")
     //println(poney)
-    parts += (("cyril.devogelaere@poneycity.be", "Cyril de Vogelaere", "vendredi 23 avril at 2pm"))
+    parts += (("cyril.devogelaere@poneycity.be", "Cyril de Vogelaere", "friday, avril 23 at 2pm"))
+    parts += (("lingi2132@ucl.be", "Pierre Schaus", "friday, avril 23 at 3pm"))
+    parts += (("master@github.com", "Github Master", "friday, avril 23 at 4pm"))
 
-    clearAll
 
     repeat {
       (email,name,date) => {
+        clearAll
+        from("florian.cyril@lingi2132.group")
         to(email)
-        add_text("Hello " + name + ",\n\n")
+        add_line("Hello " + name + ",")
         add_text("Your oral exam for the course LINGI2132 will take place at BARB12 on ")
-        add_text(date in bold)
-        add_text("\n")
+        add_line(date in bold)
+        add_line("See you!")
         send
       }
     } foreach parts
