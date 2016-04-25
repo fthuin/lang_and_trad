@@ -199,6 +199,14 @@ trait MessageInterface{
       }
     }
   }
+  // Custom repeat loop
+  def repeat(command: (String, String, String, String) => Unit) = new {
+    def foreach(tuples: => ArrayBuffer[(String, String, String, String)]): Unit = {
+      for ((part1, part2, part3, part4) <- tuples) {
+        command(part1, part2, part3, part4)
+      }
+    }
+  }
 
 }
 
