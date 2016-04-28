@@ -1,12 +1,8 @@
 package main.scala.example
 
-import javax.mail.Message
-import javax.mail.MessagingException
-import javax.mail.Session
-import javax.mail.Transport
-import javax.mail.internet.InternetAddress
-import javax.mail.internet.MimeMessage
 import java.util.Properties
+import javax.mail.{Message, MessagingException, Session, Transport}
+import javax.mail.internet.{InternetAddress, MimeMessage}
 
 /**
   * Created by Cyril on 04-04-16.

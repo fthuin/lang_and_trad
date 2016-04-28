@@ -1,6 +1,7 @@
 package main.scala.settings
 
 import javax.mail.internet.{MimeMessage => LibraryMimeMessage}
+
 import main.scala.dslcode.MessageBuilder
 
 /**
@@ -13,6 +14,10 @@ trait MailSettings{
 
   //This variable contains the port that must be used to reach the SMTP host
   val SMTPport = 2525
+
+  val IMAPhost = "localhost"
+  val IMAPport = 993
+  val MailStoreType = "pop3"
 
   //This variable contains a scala regex that checks the validity of email addresses
   val EmailValidityRegex = """([\w\.]+)@([\w\.]+)""" //http://stackoverflow.com/questions/13912597/validate-email-one-liner-in-scala
