@@ -7,7 +7,7 @@ import main.scala.dslcode.MessageBuilder
 /**
   * Created by Cyril on 05-04-16.
   */
-trait MailSettings{
+trait MailSettings {
 
   //This variable contains the url of the SMTP host
   val SMTPhost = "localhost"

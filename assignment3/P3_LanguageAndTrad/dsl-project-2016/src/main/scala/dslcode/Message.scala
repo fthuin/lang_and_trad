@@ -367,6 +367,10 @@ object MessageBuilder {
       props.put("mail.smtp.starttls.enable", settings.tls.toString)
       props.put("mail.smtp.host",  settings.SMTPhost)
       props.put("mail.smtp.port", settings.SMTPport.toString)
+      props.put("mail.imap.host", settings.IMAPhost)
+      props.put("mail.imap.port", settings.IMAPport.toString)
+      props.put("mail.store.protocol", "imaps")
+      props.put("mail.imap.starttls.enable", settings.tls.toString)
       apply(props, settings.username, settings.password)
     } else {
       apply(settings.SMTPhost, settings.SMTPport)
@@ -402,7 +406,10 @@ object MessageBuilder {
     properties.put("mail.smtp.host", host)
     properties.put("mail.smtp.port", port.toString)
     properties.put("mail.smtp.starttls.enable", "true"); //To enable transport layer security
-
+    properties.put("mail.imap.host", host)
+    properties.put("mail.imap.port", port.toString)
+    properties.put("mail.store.protocol", "imaps")
+    properties.put("mail.imap.starttls.enable", "true")
     apply(properties, username, password)
   }
 
