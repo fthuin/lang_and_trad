@@ -83,7 +83,16 @@
     We hid a lot of the verbosity with a \verb#MessageInterface# trait that
     handles a lot of functions and also that contains the Message that reifies
     the email (this alone cuts off a big part of the code to write to send
-    an email).
+    an email). \newline
+
+    The user can easily apply his own configuration settings to send or receive
+    emails from his own mail provider, thanks to this method:
+
+    \lstinputlisting{mailSettings.scala}
+
+    The user doesn't know that we set settings for both IMAP and SMTP, but he
+    doesn't care since in one class he can only whether receive whether send
+    emails.
 
     \subsection{Documented examples}
     % Some documented examples
