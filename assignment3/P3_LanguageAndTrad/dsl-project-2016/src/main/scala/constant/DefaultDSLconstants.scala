@@ -1,8 +1,5 @@
 package main.scala.constant
 
-import main.scala.dslcode.MessageBuilder
-import main.scala.settings.DefaultMailSettings
-
 /**
   * Created by Cyril on 04-04-16.
   */

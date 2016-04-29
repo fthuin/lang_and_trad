@@ -9,7 +9,10 @@ object GoogleMailSettings extends MailSettings {
   override val auth = true
   override val tls = true
 
-  override val username = "grosbras2"
-  override val password = "toset"
+  override val username = "@gmail.com"
+  override val password = ""
+
+  override val IMAPhost = "imap.gmail.com"
+  override val IMAPport = 993
 
 }
