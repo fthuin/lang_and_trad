@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ivy-report.xsl"?>
+<ivy-report version="1.0">
+	<info
+		organisation="default"
+		module="dsl-project-2016$sources_2.11"
+		revision="1.0"
+		conf="compile-internal"
+		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
+		date="20160423104056"/>
+	<dependencies>
+		<module organisation="javax.mail" name="mail">
+			<revision name="1.4.1" status="release" pubdate="20080924193928" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://glassfish.dev.java.net/javaee5/mail/" downloaded="false" searched="false" default="false" conf="default(compile), default, compile, runtime, master" position="1">
+				<license name="Common Development and Distribution License (CDDL) v1.0" url="https://glassfish.dev.java.net/public/CDDLv1.0.html"/>
+				<metadata-artifact status="no" details="" size="2677" time="0" location="/home/florian/.ivy2/cache/javax.mail/mail/ivy-1.4.1.xml" searched="false" origin-is-local="false" origin-location="https://jcenter.bintray.com/javax/mail/mail/1.4.1/mail-1.4.1.pom"/>
+				<caller organisation="default" name="dsl-project-2016$sources_2.11" conf="optional, compile, provided, compile-internal" rev="1.4.1" rev-constraint-default="1.4.1" rev-constraint-dynamic="1.4.1" callerrev="1.0"/>
+				<artifacts>
+					<artifact name="mail" type="jar" ext="jar" status="no" details="" size="447676" time="0" location="/home/florian/.ivy2/cache/javax.mail/mail/jars/mail-1.4.1.jar">
+						<origin-location is-local="false" location="https://jcenter.bintray.com/javax/mail/mail/1.4.1/mail-1.4.1.jar"/>
+					</artifact>
+					<artifact name="mail" type="src" ext="jar" extra-classifier="sources" status="successful" details="" size="613265" time="1449" location="/home/florian/.ivy2/cache/javax.mail/mail/srcs/mail-1.4.1-sources.jar">
+						<origin-location is-local="false" location="https://jcenter.bintray.com/javax/mail/mail/1.4.1/mail-1.4.1-sources.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="javax.activation" name="activation">
+			<revision name="1.1" status="release" pubdate="20080831134538" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://java.sun.com/products/javabeans/jaf/index.jsp" downloaded="false" searched="false" default="false" conf="default(compile), default, compile, runtime, master" position="2">
+				<license name="Common Development and Distribution License (CDDL) v1.0" url="https://glassfish.dev.java.net/public/CDDLv1.0.html"/>
+				<metadata-artifact status="no" details="" size="2718" time="0" location="/home/florian/.ivy2/cache/javax.activation/activation/ivy-1.1.xml" searched="false" origin-is-local="false" origin-location="https://jcenter.bintray.com/javax/activation/activation/1.1/activation-1.1.pom"/>
+				<caller organisation="default" name="dsl-project-2016$sources_2.11" conf="optional, compile, provided, compile-internal" rev="1.1" rev-constraint-default="1.1" rev-constraint-dynamic="1.1" callerrev="1.0"/>
+				<artifacts>
+					<artifact name="activation" type="src" ext="jar" extra-classifier="sources" status="successful" details="" size="63338" time="1593" location="/home/florian/.ivy2/cache/javax.activation/activation/srcs/activation-1.1-sources.jar">
+						<origin-location is-local="false" location="https://jcenter.bintray.com/javax/activation/activation/1.1/activation-1.1-sources.jar"/>
+					</artifact>
+					<artifact name="activation" type="jar" ext="jar" status="no" details="" size="62983" time="0" location="/home/florian/.ivy2/cache/javax.activation/activation/jars/activation-1.1.jar">
+						<origin-location is-local="false" location="https://jcenter.bintray.com/javax/activation/activation/1.1/activation-1.1.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.scala-lang" name="scala-library">
+			<revision name="2.11.8" status="release" pubdate="20160309051604" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://www.scala-lang.org/" extra-info.apiURL="http://www.scala-lang.org/api/2.11.8/" downloaded="false" searched="false" default="false" conf="default(compile), default, compile, runtime, master" position="0">
+				<license name="BSD 3-Clause" url="http://www.scala-lang.org/license.html"/>
+				<metadata-artifact status="no" details="" size="2653" time="0" location="/home/florian/.ivy2/cache/org.scala-lang/scala-library/ivy-2.11.8.xml" searched="false" origin-is-local="false" origin-location="https://jcenter.bintray.com/org/scala-lang/scala-library/2.11.8/scala-library-2.11.8.pom"/>
+				<caller organisation="default" name="dsl-project-2016$sources_2.11" conf="optional, compile, provided, compile-internal" rev="2.11.8" rev-constraint-default="2.11.8" rev-constraint-dynamic="2.11.8" callerrev="1.0" extra-info.apiURL="http://www.scala-lang.org/api/2.11.8/"/>
+				<artifacts>
+					<artifact name="scala-library" type="src" ext="jar" extra-classifier="sources" status="no" details="" size="911686" time="0" location="/home/florian/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.11.8-sources.jar">
+						<origin-location is-local="false" location="https://jcenter.bintray.com/org/scala-lang/scala-library/2.11.8/scala-library-2.11.8-sources.jar"/>
+					</artifact>
+					<artifact name="scala-library" type="jar" ext="jar" status="no" details="" size="5744974" time="0" location="/home/florian/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar">
+						<origin-location is-local="false" location="https://jcenter.bintray.com/org/scala-lang/scala-library/2.11.8/scala-library-2.11.8.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+	</dependencies>
+</ivy-report>
