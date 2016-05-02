@@ -315,7 +315,7 @@ trait MessageInterface{
       println("--------------------------------------------")
       println("Subject: " + m.getSubject)
       println("From: " + m.getFrom.mkString(","))
-      if (m.getDataHandler.getContentType.toLowerCase.contains("text/plain")) println(m.getContent.toString)
+      if (m.getDataHandler.getContentType.toLowerCase.contains("text/")) println(m.getContent.toString)
       else println("The content of this message is too complex to be shown.")
       println("Press q to quit or any key to continue, then press Enter.")
       val ret: String = scala.io.StdIn.readLine() //waits for any key to be pressed
