@@ -424,4 +424,27 @@ object MessageBuilder {
   def apply(session: Session): LibraryMimeMessage = new LibraryMimeMessage(session)
   def apply(session: Session, inputStream: InputStream): LibraryMimeMessage = new LibraryMimeMessage(session, inputStream)
 
+<<<<<<< HEAD
+  //Basic javamail constructor with custom setting
+
+  def apply(setting: MailSettings, libraryMimeMessage: LibraryMimeMessage): LibraryMimeMessage with MessageInterface = {
+    val obj = new LibraryMimeMessage(libraryMimeMessage) with MessageInterface
+    obj.settings = setting
+    obj.utilInstance = new settingsRelatedUtils(setting)
+    obj
+  }
+
+  def apply(setting: MailSettings, session: Session): LibraryMimeMessage with MessageInterface = {
+    val obj = new LibraryMimeMessage(session) with MessageInterface
+    obj.settings = setting
+    obj.utilInstance = new settingsRelatedUtils(setting)
+    obj
+  }
+
+  def apply(setting: MailSettings, session: Session, inputStream: InputStream): LibraryMimeMessage with MessageInterface = {
+    val obj = new LibraryMimeMessage(session, inputStream) with MessageInterface
+    obj.settings = setting
+    obj.utilInstance = new settingsRelatedUtils(setting)
+    obj
+  }
 }
