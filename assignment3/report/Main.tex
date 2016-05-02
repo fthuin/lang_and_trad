@@ -1,0 +1,155 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{placeins}
+\usepackage{qtree}
+\usepackage{csquotes}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{multicol}
+\usetikzlibrary{automata,arrows,positioning,shapes}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{listings}
+
+\graphicspath{{img/}}
+
+\usepackage{color}
+% "define" Scala
+\lstdefinelanguage{scala}{
+  morekeywords={abstract,case,catch,class,def,%
+    do,else,extends,false,final,finally,%
+    for,if,implicit,import,match,mixin,%
+    new,null,object,override,package,%
+    private,protected,requires,return,sealed,%
+    super,this,throw,trait,true,try,%
+    type,val,var,while,with,yield},
+  otherkeywords={=>,<-,<\%,<:,>:,\#},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[n]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]"""
+}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=scala,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\footnotesize\ttfamily},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  frame=single,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\author{Florian Thuin \and Cyril de Vogelaere}
+\date{\today}
+\title{INGI2132 --- Domain Specific Language}
+
+\begin{document}
+
+    \maketitle
+    %\tableofcontents
+
+    \begin{abstract}
+        In this report, we will show you how we build our DSL on top of the
+        JavaMail library for the last assignment of the language and translators
+        course.
+    \end{abstract}
+
+    \section{Functionalities and specificities of our DSL}
+
+    We mainly focused on the sending of emails since we received an SMTP fake
+    server and no POP3 or IMAP fake server, we thought it was the main part
+    of the project. We implemented a lot of user-friendly shortcuts to add
+    sender addresses, recipients, subject, texts,\ldots
+
+    We hid a lot of the verbosity with a \verb#MessageInterface# trait that
+    handles a lot of functions and also that contains the Message that reifies
+    the email (this alone cuts off a big part of the code to write to send
+    an email). \newline
+
+    The user can easily apply his own configuration settings to send or receive
+    emails from his own mail provider, thanks to this method:
+
+    \lstinputlisting{mailSettings.scala}
+
+    The user doesn't know that we set settings for both IMAP and SMTP, but he
+    doesn't care since in one class he can only whether receive whether send
+    emails.
+
+    \subsection{Documented examples}
+    % Some documented examples
+    \subsubsection{Sending messages}
+    As we get an example for the basic sending email approach, we tried to
+    create a DSL on top of it. There is what it looks like at the end with
+    every simple features given in the JavaMail library:
+
+    \lstinputlisting{basicMessageSyntacticSugar.scala}
+
+    \subsubsection{Receiving messages}
+
+    We also tried to allow the user to easily receive email. It works great
+    with Gmail.
+
+    \lstinputlisting{receivingEmail.scala}
+
+    \subsection{Advanced DSL features}
+    % Where did you use advanced DSL features and why?
+    We implemented a template-like loop such that the user can write an
+    email to many people at the same time easily with customized information.
+
+    \lstinputlisting{templateMessageDSL.scala}
+    \subsection{Strong/weak points of our DSL}
+    The strong point of our DSL is it is really easy to use, there is not really
+    black magic behind it. It can be used to send a lot of emails that can
+    be useful (not spams with everytime the same email sent for example). Our DSL
+    doesn't reduce the scope of problems that can be solved by the JavaMail
+    library and it should be easy to use our DSL along with other very specific
+    usage. \newline
+
+    The weak points of our DSL is that it is not very powerful to get the emails
+    since the JavaMail API doesn't give much help (for example, in filtering
+    emails with some kind of content). The other weak point resides in the fact
+    that we use tuples for our template feature and tuples are defined by their
+    length in Scala, it is not generalizable so we can't create a single method
+    to handle each kind of template.
+
+    \subsection{What if we had more time?}
+
+    We would have made the template more flexible by accepting a bigger size of arguments
+    and by reading from a CSV input for example. We could have made the DSL
+    more flexible for reading a limited number of emails or for reading mails
+    received between two dates. \newline
+
+    We could also write more settings to allow the user to select YahooMail or
+    Hotmail pre-defined settings. We also thought of having a folder of pre-written
+    emails to send such that the user would have a method to send them all at
+    the same time, it is an interesting feature but our friends found it
+    counter-intuitive.
+
+    \section{Conclusion}
+
+    This was a very interesting project to work on. DSLs were a whole new
+    field for us, it was sometimes hard to find ideas to implement and also
+    hard to familiarize with Scala, but we learned a lot and it showed us how
+    Scala can be powerful to handle common and not-so-common problems (from
+    concatenating strings with commas to create customized loops) and we hope
+    our project show that as a result.
+\end{document}

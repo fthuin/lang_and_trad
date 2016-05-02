@@ -4,8 +4,8 @@
 		module="dsl-project-2016-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20160322143058"
-		e:sbtVersion="0.13" e:scalaVersion="2.10"
+		publication="20160423103923"
+		e:scalaVersion="2.10" e:sbtVersion="0.13"
 	>
 		<description>
 		dsl-project-2016-build
