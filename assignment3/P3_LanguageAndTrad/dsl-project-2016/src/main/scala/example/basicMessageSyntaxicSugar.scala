@@ -14,7 +14,7 @@ object basicMessageSyntaxicSugar {
     val toAddr: String = "abcd@gmail.com"
     val fromAddr: String = "web@gmail.com"
 
-    val message = MessageBuilder(DefaultMailSettings)
+    implicit val message = MessageBuilder(DefaultMailSettings)
 
     message from (fromAddr + ", Hello@GB.com")
     message add_from "myLittlePony@ponyland.fr"
